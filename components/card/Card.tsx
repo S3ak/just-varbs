@@ -10,14 +10,21 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+interface IProps {
+  title?: string;
+  description?: string;
+  primaryCTA?: string;
+  secondaryCTA?: string;
+}
+
 export function MyCard({
-  title = "default title",
-  description = "default description",
-  children = null,
-  primaryCTA = "Click Me",
-  secondaryCTA = "Click Me",
+  title = "",
+  description = "",
+  children = "",
+  primaryCTA = "",
+  secondaryCTA = "",
   ...props
-}): React.ComponentProps<"div"> {
+}: React.ComponentProps<"div"> & IProps) {
   return (
     <Card className="w-[350px]" {...props}>
       <CardHeader>

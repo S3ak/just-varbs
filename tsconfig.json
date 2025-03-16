@@ -25,6 +25,8 @@
       "@ui*": ["./components/ui/*"],
       "@lib*": ["./lib/*"],
       "@hooks*": ["./hooks/*"],
+      "@config*": ["./config"],
+      "@/queries*": ["./queries/*"],
       "@types": ["./lib/types.ts"]
     }
   },

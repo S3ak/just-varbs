@@ -14,6 +14,7 @@ export async function createClient() {
         },
         setAll(cookiesToSet) {
           try {
+            console.log("Setting cookies:", cookiesToSet);
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options)
             );
@@ -24,6 +25,12 @@ export async function createClient() {
           }
         },
       },
+      auth: {
+        autoRefreshToken: false,
+        persistSession: true,
+      },
     }
   );
 }
+
+export default createClient;

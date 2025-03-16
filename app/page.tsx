@@ -14,31 +14,48 @@ import {
 import { FaMusic, FaTrophy, FaUserFriends } from "react-icons/fa";
 import { BsArrowRight } from "react-icons/bs";
 import Link from "next/link";
-// import MusicPlayer from "@components/music-player";
-import SpotifyPlayer from "@/components/spotify-player";
+import { buttonVariants } from "@components/ui/button";
+import createClient from "@lib/supabase/server";
 
 export default async function Home() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+  const { data: sessionData } = await supabase.auth.getSession();
+  console.warn("sessionData >>>", sessionData);
+  console.warn("user >>>", user);
+
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-gradient-to-r from-green-500 to-green-700 py-20 px-6">
         <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-5xl font-bold mb-4">Welcome to Just-Varbs</h1>
+          <h1 className="text-5xl font-bold mb-4">
+            {user?.email}Welcome to Just-Varbs{" "}
+            {sessionData?.session?.access_token}
+          </h1>
           <p className="text-xl mb-8">
             The ultimate music battle game where your taste is put to the test!
           </p>
           <div className="flex justify-center gap-4">
             <Button className="bg-black text-white hover:bg-gray-800 px-8 py-6 text-lg rounded-full">
-              <Link href="/login" className="flex items-center gap-2">
+              <Link href="/sign-in" className="flex items-center gap-2">
                 Login <BsArrowRight />
               </Link>
             </Button>
             <Button className="bg-white text-green-600 hover:bg-gray-100 px-8 py-6 text-lg rounded-full">
-              <Link href="/signup" className="flex items-center gap-2">
+              <Link href="/sign-up" className="flex items-center gap-2">
                 Sign Up <BsArrowRight />
               </Link>
             </Button>
           </div>
-          <SpotifyPlayer />
+          <Link
+            href={`/match/${crypto.randomUUID()}`}
+            className={buttonVariants({ variant: "default" })}
+          >
+            Start a new Game
+          </Link>
         </div>
       </header>
 

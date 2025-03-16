@@ -23,7 +23,6 @@ export interface Match {
   judge_id: string;
   created_at: string;
   completed_at: string | null;
-  is_completed: boolean;
 }
 
 export interface Round {
@@ -36,7 +35,7 @@ export interface Round {
   winner_id: string | null;
   current_turn: number;
   total_turns: number;
-  is_completed: boolean;
+  completed_at: string;
   datetime_start: string;
   datetime_end: string;
   answer1: string | null;
