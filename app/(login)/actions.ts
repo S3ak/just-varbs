@@ -202,9 +202,8 @@ export async function signInWithEmail(formData: FormData) {
     }
   }
 
-  console.log("signInWithEmail END");
   // If sign-in is successful, redirect to dashboard
-  // redirect("/");
+  redirect("/");
 }
 
 export async function signUpWithEmail(formData: FormData) {

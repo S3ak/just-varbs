@@ -14,3 +14,12 @@ export const getUser = async () => {
 
   return user;
 };
+export const signOutUser = async () => {
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.signOut();
+  if (error) {
+    return null;
+  }
+
+  return data;
+};

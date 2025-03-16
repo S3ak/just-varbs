@@ -31,10 +31,7 @@ export default async function Home() {
     <div className="min-h-screen flex flex-col">
       <header className="bg-gradient-to-r from-green-500 to-green-700 py-20 px-6">
         <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-5xl font-bold mb-4">
-            {user?.email}Welcome to Just-Varbs{" "}
-            {sessionData?.session?.access_token}
-          </h1>
+          <h1 className="text-5xl font-bold mb-4">Welcome to Just-Varbs</h1>
           <p className="text-xl mb-8">
             The ultimate music battle game where your taste is put to the test!
           </p>

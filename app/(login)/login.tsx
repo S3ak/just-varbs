@@ -25,16 +25,34 @@ export function Login({ mode = "signin" }: { mode?: "signin" | "signup" }) {
             : "Get started with your new account"}
         </p>
 
-        <Form action={signInWithEmail}>
-          <p>Sign In</p>
-          <label htmlFor="email">Email:</label>
-          <input id="email" name="email" type="email" required />
-          <br />
-          <label htmlFor="password">Password:</label>
-          <input id="password" name="password" type="password" required />
-          <br />
-          <Button type="submit">Log in</Button>
-        </Form>
+        {mode === "signin" ? (
+          <Form action={signInWithEmail}>
+            <p>Sign In</p>
+            <label htmlFor="email">Email:</label>
+            <input id="email" name="email" type="email" required />
+            <br />
+            <label htmlFor="password">Password:</label>
+            <input id="password" name="password" type="password" required />
+            <br />
+            <Button type="submit">Log in</Button>
+          </Form>
+        ) : (
+          <Form action={signUpWithEmail}>
+            <p>Sign Up</p>
+            <label htmlFor="email">Email:</label>
+            <input id="register-email" name="email" type="email" required />
+            <br />
+            <label htmlFor="password">Password:</label>
+            <input
+              id="register-password"
+              name="password"
+              type="password"
+              required
+            />
+            <br />
+            <Button type="submit">Sign Up</Button>
+          </Form>
+        )}
         <div className="mt-10">
           <div className="space-y-6">
             <div className="relative">
@@ -62,22 +80,6 @@ export function Login({ mode = "signin" }: { mode?: "signin" | "signup" }) {
               {mode === "signin" ? "Create an account" : "Sign in"}
             </Link>
           </p>
-
-          <Form action={signUpWithEmail}>
-            <p>Sign Up</p>
-            <label htmlFor="email">Email:</label>
-            <input id="register-email" name="email" type="email" required />
-            <br />
-            <label htmlFor="password">Password:</label>
-            <input
-              id="register-password"
-              name="password"
-              type="password"
-              required
-            />
-            <br />
-            <Button type="submit">Sign Up</Button>
-          </Form>
         </div>
       </div>
     </div>
