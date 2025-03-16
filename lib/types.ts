@@ -62,7 +62,9 @@ export interface SpotifyTrack {
     name: string;
     images: Array<{ url: string; height: number; width: number }>;
   };
-  preview_url: string;
+  external_urls: {
+    spotify: string;
+  };
 }
 
 export interface SpotifyArtist {

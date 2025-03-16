@@ -1,4 +1,5 @@
-// app/components/music-player.tsx
+"use client";
+
 import React, { useState, useEffect, useRef } from "react";
 import { BsPlayFill, BsPauseFill } from "react-icons/bs";
 import { cn } from "@/lib/utils";

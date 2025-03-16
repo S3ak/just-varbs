@@ -14,8 +14,10 @@ import {
 import { FaMusic, FaTrophy, FaUserFriends } from "react-icons/fa";
 import { BsArrowRight } from "react-icons/bs";
 import Link from "next/link";
+// import MusicPlayer from "@components/music-player";
+import SpotifyPlayer from "@/components/spotify-player";
 
-export default function Home() {
+export default async function Home() {
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-gradient-to-r from-green-500 to-green-700 py-20 px-6">
@@ -36,6 +38,7 @@ export default function Home() {
               </Link>
             </Button>
           </div>
+          <SpotifyPlayer />
         </div>
       </header>
 

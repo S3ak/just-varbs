@@ -1,11 +1,12 @@
-// app/utils/spotify.ts
 import { SpotifyTrack, SpotifyArtist, SpotifyAlbum } from "@types";
+
+const SPOTIFY_API_URL = "https://api.spotify.com/v1";
 
 // Token management
 let accessToken: string | null = null;
 let tokenExpiryTime: number | null = null;
 
-async function getAccessToken(): Promise<string> {
+async function getAccessToken(): Promise<string | null> {
   // If we have a valid token, return it
   if (accessToken && tokenExpiryTime && Date.now() < tokenExpiryTime) {
     return accessToken;
@@ -23,7 +24,9 @@ async function getAccessToken(): Promise<string> {
         "Basic " +
         Buffer.from(`${clientId}:${clientSecret}`).toString("base64"),
     },
-    body: "grant_type=client_credentials",
+    body: new URLSearchParams({
+      grant_type: "client_credentials",
+    }),
   });
 
   const data = await response.json();
