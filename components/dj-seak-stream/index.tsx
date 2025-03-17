@@ -14,14 +14,12 @@ export default function DJSeakStream({ initialState = defaultState }) {
 
   const link = initialState.spotifyLink;
 
-  console.log("link", initialState);
-
   if (!link) {
     return null;
   }
 
   return (
-    <div>
+    <div className="flex flex-col gap-6 rounded-xl py-6 shadow-sm items-center">
       <Spotify link={link} />
     </div>
   );

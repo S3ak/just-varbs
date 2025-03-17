@@ -139,8 +139,6 @@ export async function userPlayback() {
 
   const data = await response.json();
 
-  console.log("<<< response ---->>>>>", data);
-
   return data;
 }
 

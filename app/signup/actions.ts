@@ -8,8 +8,6 @@ import createClient from "@/lib/supabase/server";
 export async function signup(formData: FormData) {
   const supabase = await createClient();
 
-  console.log("SIgn up suppose to worj");
-
   // type-casting here for convenience
   // in practice, you should validate your inputs
   const data = {

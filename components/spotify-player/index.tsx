@@ -2,38 +2,35 @@
 
 import React, { useEffect, useState } from "react";
 import { Spotify } from "react-spotify-embed";
+import { useDebounceValue } from "usehooks-ts";
+
 import { searchTracks } from "@/lib/spotify";
 import { SpotifyTrack } from "@/lib/types";
+import InputField from "@/components/input-field";
 
 export default function SpotifyPlayerWrapper({ defaultSearchTerm = "" }) {
   const [selectedTrack, setSelectedTrack] = useState<SpotifyTrack | null>(null);
-  const [searchTerm, setSearchTerm] = useState<string>(defaultSearchTerm);
+  const [debouncedValue, setValue] = useDebounceValue(defaultSearchTerm, 500);
 
   useEffect(() => {
-    async function getsong() {
-      if (searchTerm) {
-        const track = await searchTracks(searchTerm);
+    async function getsong(val = "") {
+      if (debouncedValue) {
+        const track = await searchTracks(val);
         setSelectedTrack(track[0]);
       }
     }
 
-    getsong();
-  }, [searchTerm]);
+    getsong(debouncedValue);
+  }, [debouncedValue]);
 
   return (
     <section>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          const formData = new FormData(e.currentTarget);
-          setSearchTerm(formData.get("song") as string);
-        }}
-      >
-        <input
+      <form>
+        <InputField
           type="text"
           name="song"
           placeholder="Enter a song name"
-          className="w-full px-4 py-2 rounded-full text-black"
+          onChange={(e) => setValue(e.target.vlue)}
         />
       </form>
       {selectedTrack?.external_urls && (

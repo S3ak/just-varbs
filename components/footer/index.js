@@ -1,4 +1,3 @@
-import React from "react";
 import Link from "next/link";
 
 const defaultState = {
@@ -27,7 +26,7 @@ const defaultState = {
 };
 
 export default function Footer({ initialState = defaultState }) {
-  const linkEls = initialState;
+  const linkEls = initialState.links;
 
   return (
     <footer className="py-6 px-6 border-t border-gray-800">

@@ -14,14 +14,12 @@ import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import createClient from "@/lib/supabase/server";
 import DJSeakStream from "@/components/dj-seak-stream";
-import { Toaster } from "sonner";
 
 export default async function Home() {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  const { data: sessionData } = await supabase.auth.getSession();
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -34,12 +32,12 @@ export default async function Home() {
             The ultimate music battle game where your taste is put to the test!
           </p>
           <div className="flex justify-center gap-4">
-            <Button className="bg-black text-white hover:bg-gray-800 px-8 py-6 text-lg rounded-full">
+            <Button>
               <Link href="/sign-in" className="flex items-center gap-2">
                 Login <BsArrowRight />
               </Link>
             </Button>
-            <Button className="bg-white text-green-600 hover:bg-gray-100 px-8 py-6 text-lg rounded-full">
+            <Button>
               <Link href="/sign-up" className="flex items-center gap-2">
                 Sign Up <BsArrowRight />
               </Link>
@@ -123,34 +121,6 @@ export default async function Home() {
           </section>
         </div>
       </main>
-
-      <footer className="py-6 px-6 border-t border-gray-800">
-        <div className="max-w-7xl mx-auto text-center text-gray-400">
-          <p className="mb-2">© 2025 Just-Varbs. All rights reserved.</p>
-          <p className="text-sm">Powered by Spotify API.</p>
-          <p className="text-sm">Made with 💖 by DJ SEAK</p>
-          <div className="flex justify-center gap-4 mt-4">
-            <Link href="/" className="text-gray-400 hover:text-white">
-              Home
-            </Link>
-            <Link href="/about" className="text-gray-400 hover:text-white">
-              About
-            </Link>
-            <Link href="/contact" className="text-gray-400 hover:text-white">
-              Contact
-            </Link>
-            <Link href="/privacy" className="text-gray-400 hover:text-white">
-              Privacy Policy
-            </Link>
-            <Link href="/terms" className="text-gray-400 hover:text-white">
-              Terms of Service
-            </Link>
-          </div>
-        </div>
-      </footer>
-
-      {/* https://sonner.emilkowal.ski/ */}
-      <Toaster />
     </div>
   );
 }

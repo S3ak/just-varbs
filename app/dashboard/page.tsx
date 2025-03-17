@@ -59,7 +59,7 @@ export default async function Dashboard() {
               Ready to battle with your music taste?
             </p>
           </div>
-          <Button className="mt-4 md:mt-0 bg-green-500 hover:bg-green-600">
+          <Button>
             <Link href="/new-game">Start New Battle</Link>
           </Button>
         </div>
