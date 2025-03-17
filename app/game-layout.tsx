@@ -1,4 +1,4 @@
-import PrimaryNav from "@components/primary-nav";
+import PrimaryNav from "@/components/primary-nav";
 
 export default function GameLayout({
   children,

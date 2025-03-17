@@ -1,4 +1,4 @@
-import { createMatch } from "@lib/game/match";
+import { createMatch } from "@/lib/game/match";
 
 export default async function Page({ params }) {
   const { slug } = await params;

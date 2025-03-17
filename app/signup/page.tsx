@@ -2,7 +2,7 @@ import Form from "next/form";
 
 import { signup } from "./actions";
 
-import Button from "@components/button";
+import Button from "@/components/button";
 
 export default function SignUpPage() {
   return (

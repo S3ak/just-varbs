@@ -1,4 +1,4 @@
-import createClient from "@lib/supabase/server";
+import createClient from "@/lib/supabase/server";
 
 export async function createMatch(id = crypto.randomUUID()) {
   const supabase = await createClient();

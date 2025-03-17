@@ -1,8 +1,5 @@
-// app/page.tsx
-// import { redirect } from "next/navigation";
-// import { auth } from "@clerk/nextjs";
-import Button from "@components/button";
-import Card from "@components/card";
+import Button from "@/components/button";
+import Card from "@/components/card";
 
 import {
   CardContent,
@@ -14,24 +11,25 @@ import {
 import { FaMusic, FaTrophy, FaUserFriends } from "react-icons/fa";
 import { BsArrowRight } from "react-icons/bs";
 import Link from "next/link";
-import { buttonVariants } from "@components/ui/button";
-import createClient from "@lib/supabase/server";
+import { buttonVariants } from "@/components/ui/button";
+import createClient from "@/lib/supabase/server";
+import DJSeakStream from "@/components/dj-seak-stream";
+import { Toaster } from "sonner";
 
 export default async function Home() {
   const supabase = await createClient();
   const {
     data: { user },
-    error,
   } = await supabase.auth.getUser();
   const { data: sessionData } = await supabase.auth.getSession();
-  console.warn("sessionData >>>", sessionData);
-  console.warn("user >>>", user);
 
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-gradient-to-r from-green-500 to-green-700 py-20 px-6">
         <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-5xl font-bold mb-4">Welcome to Just-Varbs</h1>
+          <h1 className="text-5xl font-bold mb-4">
+            Welcome {user?.confirmed_at ? "back" : ""} to Just-Varbs
+          </h1>
           <p className="text-xl mb-8">
             The ultimate music battle game where your taste is put to the test!
           </p>
@@ -47,12 +45,6 @@ export default async function Home() {
               </Link>
             </Button>
           </div>
-          <Link
-            href={`/match/${crypto.randomUUID()}`}
-            className={buttonVariants({ variant: "default" })}
-          >
-            Start a new Game
-          </Link>
         </div>
       </header>
 
@@ -118,12 +110,17 @@ export default async function Home() {
           </div>
 
           <div className="text-center mt-16">
-            <Button className="bg-green-500 hover:bg-green-600 text-white px-8 py-6 text-lg rounded-full">
-              <Link href="/signup" className="flex items-center gap-2">
-                Get Started Now <BsArrowRight />
-              </Link>
-            </Button>
+            <Link
+              href={`/match/${crypto.randomUUID()}`}
+              className={buttonVariants({ variant: "default" })}
+            >
+              Start a new Game
+            </Link>
           </div>
+
+          <section>
+            <DJSeakStream />
+          </section>
         </div>
       </main>
 
@@ -131,8 +128,29 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto text-center text-gray-400">
           <p className="mb-2">© 2025 Just-Varbs. All rights reserved.</p>
           <p className="text-sm">Powered by Spotify API.</p>
+          <p className="text-sm">Made with 💖 by DJ SEAK</p>
+          <div className="flex justify-center gap-4 mt-4">
+            <Link href="/" className="text-gray-400 hover:text-white">
+              Home
+            </Link>
+            <Link href="/about" className="text-gray-400 hover:text-white">
+              About
+            </Link>
+            <Link href="/contact" className="text-gray-400 hover:text-white">
+              Contact
+            </Link>
+            <Link href="/privacy" className="text-gray-400 hover:text-white">
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="text-gray-400 hover:text-white">
+              Terms of Service
+            </Link>
+          </div>
         </div>
       </footer>
+
+      {/* https://sonner.emilkowal.ski/ */}
+      <Toaster />
     </div>
   );
 }

@@ -1,8 +1,8 @@
 "use server";
 import { z } from "zod";
-import { validatedAction } from "@lib/auth/middleware";
+import { validatedAction } from "@/lib/auth/middleware";
 import { redirect } from "next/navigation";
-import { createClient } from "@lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 
 const signInSchema = z.object({
   email: z.string().email().min(3).max(255),
