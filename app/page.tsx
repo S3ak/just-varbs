@@ -1,8 +1,5 @@
-// app/page.tsx
-// import { redirect } from "next/navigation";
-// import { auth } from "@clerk/nextjs";
-import Button from "@components/button";
-import Card from "@components/card";
+import Button from "@/components/button";
+import Card from "@/components/card";
 
 import {
   CardContent,
@@ -14,45 +11,38 @@ import {
 import { FaMusic, FaTrophy, FaUserFriends } from "react-icons/fa";
 import { BsArrowRight } from "react-icons/bs";
 import Link from "next/link";
-import { buttonVariants } from "@components/ui/button";
-import createClient from "@lib/supabase/server";
+import { buttonVariants } from "@/components/ui/button";
+import createClient from "@/lib/supabase/server";
+import DJSeakStream from "@/components/dj-seak-stream";
 
 export default async function Home() {
   const supabase = await createClient();
   const {
     data: { user },
-    error,
   } = await supabase.auth.getUser();
-  const { data: sessionData } = await supabase.auth.getSession();
-  console.warn("sessionData >>>", sessionData);
-  console.warn("user >>>", user);
 
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-gradient-to-r from-green-500 to-green-700 py-20 px-6">
         <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-5xl font-bold mb-4">Welcome to Just-Varbs</h1>
+          <h1 className="text-5xl font-bold mb-4">
+            Welcome {user?.confirmed_at ? "back" : ""} to Just-Varbs
+          </h1>
           <p className="text-xl mb-8">
             The ultimate music battle game where your taste is put to the test!
           </p>
           <div className="flex justify-center gap-4">
-            <Button className="bg-black text-white hover:bg-gray-800 px-8 py-6 text-lg rounded-full">
+            <Button>
               <Link href="/sign-in" className="flex items-center gap-2">
                 Login <BsArrowRight />
               </Link>
             </Button>
-            <Button className="bg-white text-green-600 hover:bg-gray-100 px-8 py-6 text-lg rounded-full">
+            <Button>
               <Link href="/sign-up" className="flex items-center gap-2">
                 Sign Up <BsArrowRight />
               </Link>
             </Button>
           </div>
-          <Link
-            href={`/match/${crypto.randomUUID()}`}
-            className={buttonVariants({ variant: "default" })}
-          >
-            Start a new Game
-          </Link>
         </div>
       </header>
 
@@ -118,21 +108,19 @@ export default async function Home() {
           </div>
 
           <div className="text-center mt-16">
-            <Button className="bg-green-500 hover:bg-green-600 text-white px-8 py-6 text-lg rounded-full">
-              <Link href="/signup" className="flex items-center gap-2">
-                Get Started Now <BsArrowRight />
-              </Link>
-            </Button>
+            <Link
+              href={`/match/${crypto.randomUUID()}`}
+              className={buttonVariants({ variant: "default" })}
+            >
+              Start a new Game
+            </Link>
           </div>
+
+          <section>
+            <DJSeakStream />
+          </section>
         </div>
       </main>
-
-      <footer className="py-6 px-6 border-t border-gray-800">
-        <div className="max-w-7xl mx-auto text-center text-gray-400">
-          <p className="mb-2">© 2025 Just-Varbs. All rights reserved.</p>
-          <p className="text-sm">Powered by Spotify API.</p>
-        </div>
-      </footer>
     </div>
   );
 }

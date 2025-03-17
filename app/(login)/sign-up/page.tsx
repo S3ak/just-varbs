@@ -1,4 +1,4 @@
-import { getUser, signOutUser } from "@/queries/user";
+import { getUser, signOutUser } from "@/lib/user/user.queries";
 import { Login } from "../login";
 
 export default async function SignUpPage() {

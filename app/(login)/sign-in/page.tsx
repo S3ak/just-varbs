@@ -1,5 +1,5 @@
 import { Login } from "../login";
-import { getUser } from "@/queries/user";
+import { getUser } from "@/lib/user/user.queries";
 
 export default async function SignInPage() {
   const user = await getUser();

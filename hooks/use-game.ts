@@ -2,7 +2,7 @@
 import { create } from "zustand";
 import { DateTime } from "luxon";
 import { User, Match, Round, Player } from "@types";
-import supabase from "@lib/supabase/client";
+import supabase from "@/lib/supabase/client";
 
 interface GameState {
   currentUser: User | null;

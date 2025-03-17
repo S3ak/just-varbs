@@ -11,7 +11,7 @@ interface MusicPlayerProps {
   artistName: string;
   className?: string;
 }
-
+// DEpreicated
 const MusicPlayer: React.FC<MusicPlayerProps> = ({
   previewUrl,
   albumArt,

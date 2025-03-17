@@ -1,11 +1,11 @@
 // app/dashboard/page.tsx
 import GameLayout from "../game-layout";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/card";
-import { Button } from "../components/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/card";
+import Button from "@/components/button";
 import Link from "next/link";
 import { FaUser, FaStar, FaTrophy, FaGamepad } from "react-icons/fa";
-import { getRank } from "../utils/game-utils";
-import supabase from "../utils/supabase";
+import { getRank } from "@/lib/game/utils";
+import supabase from "@/lib/supabase/server";
 
 async function getPlayerStats(userId: string) {
   const { data: player } = await supabase
@@ -59,7 +59,7 @@ export default async function Dashboard() {
               Ready to battle with your music taste?
             </p>
           </div>
-          <Button className="mt-4 md:mt-0 bg-green-500 hover:bg-green-600">
+          <Button>
             <Link href="/new-game">Start New Battle</Link>
           </Button>
         </div>
