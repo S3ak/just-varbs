@@ -4,6 +4,7 @@ import { searchTracks } from "@/lib/spotify";
 import { p1FormSchema } from "@/lib/game/formSchemas";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { addParamsToURL } from "@/lib/game/utils";
 
 export async function getSong(query: string) {
   const tracks = await searchTracks(query);
@@ -68,26 +69,22 @@ export async function onSubmitAnswerAction(
 ) {
   const { id, p1Name, p1Query, p2Name, p2Query } = Object.fromEntries(data);
 
-  const newP1Name =
-    p1Name === "undefined"
-      ? ""
-      : (p1Name as string) || initialSearchParams.p1Name;
-  const newP1Query =
-    p1Query === "undefined"
-      ? ""
-      : (p1Query as string) || initialSearchParams.p1Query;
-  const newP2Name =
-    p2Name === "undefined"
-      ? ""
-      : (p2Name as string) || initialSearchParams.p2Name;
-  const newP2Query =
-    p2Query === "undefined"
-      ? ""
-      : (p2Query as string) || initialSearchParams.p2Query;
+  const newP1Name = !p1Name
+    ? ""
+    : (p1Name as string) || initialSearchParams.p1Name;
+  const newP1Query = !p1Query
+    ? ""
+    : (p1Query as string) || initialSearchParams.p1Query;
+  const newP2Name = !p2Name
+    ? ""
+    : (p2Name as string) || initialSearchParams.p2Name;
+  const newP2Query = !p2Query
+    ? ""
+    : (p2Query as string) || initialSearchParams.p2Query;
 
   console.warn("initialSearchParams --->", initialSearchParams);
 
-  const params = {
+  const newSearchParams = {
     ...initialSearchParams,
     p1Name: newP1Name,
     p1Query: newP1Query,
@@ -95,11 +92,8 @@ export async function onSubmitAnswerAction(
     p2Query: newP2Query,
   };
 
-  const searchParams = new URLSearchParams(Object.entries(params));
-  const url = `/match/${id}?${searchParams.toString()}`;
-
   revalidatePath(`/match/${id}`);
-  redirect(url);
+  redirect(addParamsToURL(newSearchParams, id as string));
 }
 
 export async function onJudgeVote(
@@ -110,10 +104,12 @@ export async function onJudgeVote(
 
   console.warn("initialSearchParams --->", initialSearchParams);
 
-  const searchParams = new URLSearchParams(Object.entries(initialSearchParams));
-  searchParams.set("judgeName", judgeName as string);
-  searchParams.set("vote", vote as string);
+  const newSearchParams = {
+    ...initialSearchParams,
+    judgeName: judgeName as string,
+    vote: vote as string,
+  };
 
   revalidatePath(`/match/${id}`);
-  redirect(`/match/${id}?${searchParams.toString()}`);
+  redirect(addParamsToURL(newSearchParams, id as string));
 }

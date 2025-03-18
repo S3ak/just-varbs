@@ -8,6 +8,7 @@ import Button from "@/components/button";
 import InputField from "@/components/input-field";
 import useGameStore from "@/hooks/use-game";
 import { toast } from "sonner";
+import { addParamsToURL } from "@/lib/game/utils";
 
 import { onSubmitAnswerAction, onJudgeVote } from "@/app/match/[slug]/actions";
 import { usePathname } from "next/navigation";
@@ -48,7 +49,11 @@ export default function Game({
   // TODO: Easier share code
   // const gameCode = "123456";
   const baseURL = getBaseURL();
-  const gameLinkURL = `${baseURL}${pathName}?${addParamsToURL(initialSearchParms, id)}`;
+  const gameLinkURL = addParamsToURL(
+    initialSearchParms,
+    id,
+    baseURL + pathName
+  );
 
   // const p1form = useForm<z.output<typeof p1FormSchema>>({
   //   resolver: zodResolver(p1FormSchema),
@@ -260,10 +265,4 @@ export default function Game({
       </div>
     </div>
   );
-}
-
-function addParamsToURL(data: Record<string, string>, id: string) {
-  const searchParams = new URLSearchParams(Object.entries(data));
-
-  return `/match/${id}?${encodeURIComponent(searchParams.toString())}`;
 }

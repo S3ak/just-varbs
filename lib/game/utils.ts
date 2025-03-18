@@ -12,3 +12,12 @@
 //     10: "Taste God",
 //   };
 // }
+
+export function addParamsToURL(
+  data: Record<string, string>,
+  id: string,
+  pathName: string = "/match"
+) {
+  const searchParams = new URLSearchParams(Object.entries(data));
+  return `${pathName}/${id}?${searchParams.toString()}`;
+}
