@@ -16,10 +16,10 @@ export function getRank(rankLevel: number): string {
 }
 
 export function addParamsToURL(
-  data: Record<string, string>,
-  id: string,
+  params: Record<string, string>,
+  slug: string,
   pathName: string = "/match"
 ) {
-  const searchParams = new URLSearchParams(Object.entries(data));
-  return `${pathName}/${id}?${searchParams.toString()}`;
+  const searchParams = new URLSearchParams(Object.entries(params));
+  return `${pathName}/${slug}?${searchParams.toString()}`;
 }
