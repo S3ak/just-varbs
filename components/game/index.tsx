@@ -4,6 +4,8 @@ import React from "react";
 import Link from "next/link";
 import Form from "next/form";
 import { Spotify } from "react-spotify-embed";
+import { FaChevronLeft } from "react-icons/fa";
+
 import Button from "@/components/button";
 import InputField from "@/components/input-field";
 import useGameStore from "@/hooks/use-game";
@@ -111,9 +113,15 @@ export default function Game({
 
   return (
     <div className="max-w-7xl mx-auto text-center">
-      <h1 className="text-5xl font-bold mb-4">
-        <Link href="/"> back</Link>Start a New Game
-      </h1>
+      <section className="flex gap-4 items-center justify-center container mx-auto max-w-4xl">
+        <Button>
+          <Link href="/match/new" className="flex items-center gap-2">
+            <FaChevronLeft />
+          </Link>
+        </Button>
+        <h1 className="text-5xl font-bold mb-4">Start a New Game</h1>
+      </section>
+
       <p className="text-xl mb-8">{question}</p>
       <section className="flex justify-center gap-4 flex-wrap">
         <div className="flex flex-col" role="column">

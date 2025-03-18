@@ -3,7 +3,13 @@ import GameLayout from "../game-layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/card";
 import Button from "@/components/button";
 import Link from "next/link";
-import { FaUser, FaStar, FaTrophy, FaGamepad } from "react-icons/fa";
+import {
+  FaUser,
+  FaStar,
+  FaTrophy,
+  FaGamepad,
+  FaChevronLeft,
+} from "react-icons/fa";
 import { getRank } from "@/lib/game/utils";
 import supabase from "@/lib/supabase/server";
 
@@ -64,7 +70,9 @@ export default async function Dashboard() {
             </p>
           </div>
           <Button>
-            <Link href="/match/new">Start New Battle</Link>
+            <Link href="/match/new" className="flex items-center gap-2">
+              <FaChevronLeft /> Start New Battle
+            </Link>
           </Button>
         </div>
 
