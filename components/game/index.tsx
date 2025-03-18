@@ -10,7 +10,11 @@ import useGameStore from "@/hooks/use-game";
 import { toast } from "sonner";
 import { addParamsToURL } from "@/lib/game/utils";
 
-import { onSubmitAnswerAction, onJudgeVote } from "@/app/match/[slug]/actions";
+import {
+  onSubmitAnswerAction,
+  onJudgeVote,
+  onJudgeNameSubmit,
+} from "@/app/match/[slug]/actions";
 import { usePathname } from "next/navigation";
 import { getBaseURL } from "@/lib/utils";
 
@@ -46,6 +50,10 @@ export default function Game({
   );
 
   const handleJudgeVote = onJudgeVote.bind(null, initialSearchParms);
+  const handleJudgeNameSubmit = onJudgeNameSubmit.bind(
+    null,
+    initialSearchParms
+  );
   // TODO: Easier share code
   // const gameCode = "123456";
   const baseURL = getBaseURL();
@@ -120,6 +128,7 @@ export default function Game({
                 defaultValue={
                   initialP1Name === "undefined" ? "" : initialP1Name
                 }
+                disabled={Boolean(initialP1Answer)}
               />
 
               <InputField
@@ -130,23 +139,29 @@ export default function Game({
                 defaultValue={
                   initialP1Query === "undefined" ? "" : initialP1Query
                 }
+                disabled={Boolean(initialP1Answer)}
               />
 
               <input hidden name="id" value={id} readOnly />
 
-              <Button hidden type="submit">
-                Submit
-              </Button>
+              {!initialP1Answer && <Button type="submit">Submit</Button>}
             </Form>
 
-            {initialP1Answer && <Spotify link={initialP1Answer} />}
+            {initialP1Answer && (
+              <div className="mt-4">
+                <div className="text-green-600 mb-2">✓ Answer submitted</div>
+                <Spotify link={initialP1Answer} />
+              </div>
+            )}
           </section>
-          <Form action={handleJudgeVote}>
-            <input hidden name="id" value={id} readOnly />
-            <input hidden name="vote" value="player1" readOnly />
-            <input hidden name="judgeName" value="Judge" readOnly />
-            <Button type="submit">Vote</Button>
-          </Form>
+          {!initialWinner && initialP1Answer && (
+            <Form action={handleJudgeVote}>
+              <input hidden name="id" value={id} readOnly />
+              <input hidden name="vote" value="player1" readOnly />
+              <input hidden name="judgeName" value="Judge" readOnly />
+              <Button type="submit">Vote</Button>
+            </Form>
+          )}
         </div>
 
         <div className="flex flex-col justify-center">
@@ -165,6 +180,7 @@ export default function Game({
                 defaultValue={
                   initialP2Name === "undefined" ? "" : initialP2Name
                 }
+                disabled={Boolean(initialP2Answer)}
               />
 
               <InputField
@@ -175,23 +191,29 @@ export default function Game({
                 defaultValue={
                   initialP2Query === "undefined" ? "" : initialP2Query
                 }
+                disabled={Boolean(initialP2Answer)}
               />
 
               <input hidden name="id" value={id} readOnly />
 
-              <Button hidden type="submit">
-                Submit
-              </Button>
+              {!initialP2Answer && <Button type="submit">Submit</Button>}
             </Form>
 
-            {Boolean(initialP2Answer) && <Spotify link={initialP2Answer} />}
+            {initialP2Answer && (
+              <div className="mt-4">
+                <div className="text-green-600 mb-2">✓ Answer submitted</div>
+                <Spotify link={initialP2Answer} />
+              </div>
+            )}
           </section>
-          <Form action={handleJudgeVote}>
-            <input hidden name="id" value={id} readOnly />
-            <input hidden name="vote" value="player2" readOnly />
-            <input hidden name="judgeName" value="Judge" readOnly />
-            <Button type="submit">Vote</Button>
-          </Form>
+          {!initialWinner && initialP2Answer && (
+            <Form action={handleJudgeVote}>
+              <input hidden name="id" value={id} readOnly />
+              <input hidden name="vote" value="player2" readOnly />
+              <input hidden name="judgeName" value="Judge" readOnly />
+              <Button type="submit">Vote</Button>
+            </Form>
+          )}
         </div>
       </section>
 
@@ -211,50 +233,38 @@ export default function Game({
 
       {!initialWinner && (
         <section className="mt-8 border-t pt-8">
-          <h2 className="text-2xl font-bold mb-4">Judge&apos;s Vote</h2>
-          <Form action={handleJudgeVote}>
-            <InputField
-              label="Judge Name"
-              name="judgeName"
-              placeholder="Enter your name"
-              required
-            />
-
-            <div className="flex flex-col gap-4 mt-4">
-              <div className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  id="voteP1"
-                  name="vote"
-                  value="player1"
-                  required
-                />
-                <label htmlFor="voteP1">
-                  Vote for {initialP1Name || "Player 1"}
-                </label>
+          <h2 className="text-2xl font-bold mb-4">Whose the Judge</h2>
+          {!initialSearchParms.judgeName ? (
+            <Form action={handleJudgeNameSubmit}>
+              <InputField
+                label="Judge Name"
+                name="judgeName"
+                placeholder="Enter your name"
+                required
+              />
+              <input hidden name="id" value={id} readOnly />
+              <Button type="submit">Submit Name</Button>
+            </Form>
+          ) : (
+            <Form action={handleJudgeVote}>
+              <div className="mb-4">
+                <p className="text-lg">Judge: {initialSearchParms.judgeName}</p>
               </div>
 
-              <div className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  id="voteP2"
-                  name="vote"
-                  value="player2"
-                  required
-                />
-                <label htmlFor="voteP2">
-                  Vote for {initialP2Name || "Player 2"}
-                </label>
-              </div>
-            </div>
+              <input hidden name="id" value={id} readOnly />
+              <input
+                hidden
+                name="judgeName"
+                value={initialSearchParms.judgeName}
+                readOnly
+              />
 
-            <input hidden name="id" value={id} readOnly />
-
-            <Button type="submit">Submit Vote</Button>
-          </Form>
+              <Button type="submit">Submit Vote</Button>
+            </Form>
+          )}
         </section>
       )}
-      <div className="flex justify-center gap-4">
+      <div className="flex justify-center gap-4 pt-16">
         <Button
           onClick={() => {
             handleShare();
