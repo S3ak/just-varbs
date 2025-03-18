@@ -67,20 +67,18 @@ export async function onSubmitAnswerAction(
   initialSearchParams: Record<string, string>,
   data: FormData
 ) {
-  const { id, p1Name, p1Query, p2Name, p2Query } = Object.fromEntries(data);
+  const {
+    id,
+    p1Name = initialSearchParams.p1Name,
+    p1Query = initialSearchParams.p1Query,
+    p2Name = initialSearchParams.p2Name,
+    p2Query = initialSearchParams.p2Query,
+  } = Object.fromEntries(data);
 
-  const newP1Name = !p1Name
-    ? ""
-    : (p1Name as string) || initialSearchParams.p1Name;
-  const newP1Query = !p1Query
-    ? ""
-    : (p1Query as string) || initialSearchParams.p1Query;
-  const newP2Name = !p2Name
-    ? ""
-    : (p2Name as string) || initialSearchParams.p2Name;
-  const newP2Query = !p2Query
-    ? ""
-    : (p2Query as string) || initialSearchParams.p2Query;
+  const newP1Name = !p1Name ? "" : (p1Name as string);
+  const newP1Query = !p1Query ? "" : (p1Query as string);
+  const newP2Name = !p2Name ? "" : (p2Name as string);
+  const newP2Query = !p2Query ? "" : (p2Query as string);
 
   console.warn("initialSearchParams --->", initialSearchParams);
 
@@ -100,7 +98,7 @@ export async function onJudgeVote(
   initialSearchParams: Record<string, string>,
   data: FormData
 ) {
-  const { id, judgeName, vote } = Object.fromEntries(data);
+  const { id, judgeName = "Random Judge", vote } = Object.fromEntries(data);
 
   console.warn("initialSearchParams --->", initialSearchParams);
 
@@ -108,6 +106,21 @@ export async function onJudgeVote(
     ...initialSearchParams,
     judgeName: judgeName as string,
     vote: vote as string,
+  };
+
+  revalidatePath(`/match/${id}`);
+  redirect(addParamsToURL(newSearchParams, id as string));
+}
+
+export async function onJudgeNameSubmit(
+  initialSearchParams: Record<string, string>,
+  data: FormData
+) {
+  const { id, judgeName } = Object.fromEntries(data);
+
+  const newSearchParams = {
+    ...initialSearchParams,
+    judgeName: judgeName as string,
   };
 
   revalidatePath(`/match/${id}`);
