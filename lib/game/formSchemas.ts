@@ -1,5 +1,15 @@
 import { z } from "zod";
 
+export const judgeFormSchema = z.object({
+  judgeName: z
+    .string()
+    .min(2, {
+      message: "Your name is required",
+    })
+    .max(50),
+  vote: z.enum(["p0", "p1", "p2"]),
+});
+
 export const p1FormSchema = z.object({
   p1Query: z
     .string()

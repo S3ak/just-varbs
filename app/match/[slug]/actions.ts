@@ -63,7 +63,7 @@ export async function onSubmitP1AnswerAction(
 }
 
 export async function onSubmitAnswerAction(
-  initialSearchParams,
+  initialSearchParams: Record<string, string>,
   data: FormData
 ) {
   const { id, p1Name, p1Query, p2Name, p2Query } = Object.fromEntries(data);
@@ -88,6 +88,7 @@ export async function onSubmitAnswerAction(
   console.warn("initialSearchParams --->", initialSearchParams);
 
   const params = {
+    ...initialSearchParams,
     p1Name: newP1Name,
     p1Query: newP1Query,
     p2Name: newP2Name,
@@ -99,4 +100,20 @@ export async function onSubmitAnswerAction(
 
   revalidatePath(`/match/${id}`);
   redirect(url);
+}
+
+export async function onJudgeVote(
+  initialSearchParams: Record<string, string>,
+  data: FormData
+) {
+  const { id, judgeName, vote } = Object.fromEntries(data);
+
+  console.warn("initialSearchParams --->", initialSearchParams);
+
+  const searchParams = new URLSearchParams(Object.entries(initialSearchParams));
+  searchParams.set("judgeName", judgeName as string);
+  searchParams.set("vote", vote as string);
+
+  revalidatePath(`/match/${id}`);
+  redirect(`/match/${id}?${searchParams.toString()}`);
 }
