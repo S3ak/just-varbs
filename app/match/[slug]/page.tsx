@@ -7,7 +7,6 @@ import {
 import Button from "@/components/button";
 import { FaChevronLeft } from "react-icons/fa";
 import Link from "next/link";
-import CarouselDemo from "@/components/carousel-demo";
 import Form from "next/form";
 import InputField from "@/components/input-field";
 import { addParamsToURL } from "@/lib/game/utils";

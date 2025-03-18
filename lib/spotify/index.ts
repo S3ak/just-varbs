@@ -201,11 +201,7 @@ export async function getUserTopItems(
   return data;
 }
 
-export async function getUsersPlaylist(
-  userId = "seakdigital",
-  limit = 5,
-  offset = 0
-) {
+export async function getUsersPlaylist(userId = "seakdigital") {
   const token = await getAccessToken();
 
   const response = await fetch(`${SPOTIFY_API_URL}/users/${userId}/playlists`, {
