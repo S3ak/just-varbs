@@ -8,23 +8,24 @@ import { getRank } from "@/lib/game/utils";
 import supabase from "@/lib/supabase/server";
 
 async function getPlayerStats(userId: string) {
-  const { data: player } = await supabase
+  const supabaseClient = await supabase();
+  const { data: player } = await supabaseClient
     .from("players")
     .select("*")
     .eq("user_id", userId)
     .single();
 
-  const { data: matchesAsCompetitor } = await supabase
+  const { data: matchesAsCompetitor } = await supabaseClient
     .from("competitors")
     .select("*")
     .eq("player_id", player?.id);
 
-  const { data: matchesAsJudge } = await supabase
+  const { data: matchesAsJudge } = await supabaseClient
     .from("matches")
     .select("*")
     .eq("judge_id", userId);
 
-  const { data: wins } = await supabase
+  const { data: wins } = await supabaseClient
     .from("matches")
     .select("*")
     .eq("winner_id", userId);
@@ -38,7 +39,10 @@ async function getPlayerStats(userId: string) {
 }
 
 export default async function Dashboard() {
-  const user = await currentUser();
+  const supabaseClient = await supabase();
+  const {
+    data: { user },
+  } = await supabaseClient.auth.getUser();
 
   if (!user) {
     return null;
@@ -53,14 +57,14 @@ export default async function Dashboard() {
         <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between">
           <div>
             <h1 className="text-3xl font-bold">
-              Welcome back, {user.firstName || user.username}
+              Welcome back, {user.user_metadata?.full_name || user.email}
             </h1>
             <p className="text-gray-400 mt-1">
               Ready to battle with your music taste?
             </p>
           </div>
           <Button>
-            <Link href="/new-game">Start New Battle</Link>
+            <Link href="/match/new">Start New Battle</Link>
           </Button>
         </div>
 
@@ -124,7 +128,7 @@ export default async function Dashboard() {
               ) : (
                 <div className="text-center py-8">
                   <p className="text-gray-400 mb-4">
-                    You haven't played any battles yet.
+                    You haven&apos;t played any battles yet.
                   </p>
                   <Button>
                     <Link href="/new-game">Start Your First Battle</Link>
@@ -147,7 +151,7 @@ export default async function Dashboard() {
               ) : (
                 <div className="text-center py-8">
                   <p className="text-gray-400">
-                    You haven't judged any battles yet.
+                    You haven&apos;t judged any battles yet.
                   </p>
                 </div>
               )}

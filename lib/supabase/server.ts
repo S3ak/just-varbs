@@ -14,7 +14,7 @@ export async function createClient() {
         },
         setAll(cookiesToSet) {
           try {
-            console.log("Setting cookies:", cookiesToSet);
+            console.info("Setting cookies:", cookiesToSet);
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options)
             );
