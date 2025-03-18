@@ -180,12 +180,7 @@ export async function getUserProfile(userId = "seakdigital") {
   return data;
 }
 
-export async function getUserTopItems(
-  type = "tracks",
-  timeRange = "medium_term",
-  limit = 5,
-  offset = 0
-) {
+export async function getUserTopItems(type = "tracks") {
   const token = await getAccessToken();
 
   const response = await fetch(`${SPOTIFY_API_URL}/me/top/${type}`, {
@@ -201,11 +196,7 @@ export async function getUserTopItems(
   return data;
 }
 
-export async function getUsersPlaylist(
-  userId = "seakdigital",
-  limit = 5,
-  offset = 0
-) {
+export async function getUsersPlaylist(userId = "seakdigital") {
   const token = await getAccessToken();
 
   const response = await fetch(`${SPOTIFY_API_URL}/users/${userId}/playlists`, {

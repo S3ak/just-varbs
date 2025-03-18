@@ -1,3 +1,4 @@
+import Footer from "@/components/footer";
 import Link from "next/link";
 
 export default function TermsOfService() {
@@ -20,8 +21,8 @@ export default function TermsOfService() {
           <h2 className="text-3xl font-bold mb-8">2. Use of the Site</h2>
           <p className="mb-4">
             You agree to use the site only for lawful purposes and in a way that
-            does not infringe the rights of, restrict, or inhibit anyone else's
-            use and enjoyment of the site.
+            does not infringe the rights of, restrict, or inhibit anyone
+            else&apos;s use and enjoyment of the site.
           </p>
 
           <h2 className="text-3xl font-bold mb-8">3. Intellectual Property</h2>
@@ -57,30 +58,7 @@ export default function TermsOfService() {
         </div>
       </main>
 
-      <footer className="py-6 px-6 border-t border-gray-800">
-        <div className="max-w-7xl mx-auto text-center text-gray-400">
-          <p className="mb-2">© 2025 Just-Varbs. All rights reserved.</p>
-          <p className="text-sm">Powered by Spotify API.</p>
-          <p className="text-sm">Made with 💖 by DJ SEAK</p>
-          <div className="flex justify-center gap-4 mt-4">
-            <Link href="/" className="text-gray-400 hover:text-white">
-              Home
-            </Link>
-            <Link href="/about" className="text-gray-400 hover:text-white">
-              About
-            </Link>
-            <Link href="/contact" className="text-gray-400 hover:text-white">
-              Contact
-            </Link>
-            <Link href="/privacy" className="text-gray-400 hover:text-white">
-              Privacy Policy
-            </Link>
-            <Link href="/terms" className="text-gray-400 hover:text-white">
-              Terms of Service
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

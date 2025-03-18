@@ -1,12 +1,14 @@
-// app/components/search-music.tsx
-import React, { useState, useEffect } from "react";
+"use client";
+
+import React, { useState, useEffect, useCallback } from "react";
 import { BsSearch } from "react-icons/bs";
-import { searchTracks, searchArtists } from "@/utils/spotify";
-import { SpotifyTrack, SpotifyArtist } from "../types";
-import { Button } from "./button";
-import { Card, CardContent } from "./card";
-import MusicPlayer from "./music-player";
+import { searchTracks, searchArtists } from "@/lib/spotify";
+import { SpotifyTrack, SpotifyArtist } from "@/lib/types";
+import Button from "@/components/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { Spotify } from "react-spotify-embed";
+import Image from "next/image";
 
 interface SearchMusicProps {
   onSelect: (item: {
@@ -28,17 +30,7 @@ const SearchMusic: React.FC<SearchMusicProps> = ({ onSelect, type }) => {
   >(null);
   const [parent] = useAutoAnimate();
 
-  useEffect(() => {
-    const delayDebounce = setTimeout(() => {
-      if (query.length > 2) {
-        search();
-      }
-    }, 500);
-
-    return () => clearTimeout(delayDebounce);
-  }, [query]);
-
-  const search = async () => {
+  const search = useCallback(async () => {
     setIsLoading(true);
     try {
       if (type === "track") {
@@ -53,19 +45,28 @@ const SearchMusic: React.FC<SearchMusicProps> = ({ onSelect, type }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [query, type]);
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(() => {
+      if (query.length > 2) {
+        search();
+      }
+    }, 500);
+
+    return () => clearTimeout(delayDebounce);
+  }, [query, search]);
 
   const handleSelect = (item: SpotifyTrack | SpotifyArtist) => {
     setSelectedItem(item);
 
-    if ("preview_url" in item) {
+    if ("external_urls" in item) {
       // It's a track
       onSelect({
         id: item.id,
         name: item.name,
         artist: item.artists[0].name,
         image: item.album.images[0]?.url || "",
-        previewUrl: item.preview_url || "",
       });
     } else {
       // It's an artist
@@ -108,10 +109,12 @@ const SearchMusic: React.FC<SearchMusicProps> = ({ onSelect, type }) => {
                 className={`cursor-pointer transition-colors hover:bg-gray-900 ${selectedItem?.id === track.id ? "border-green-500" : ""}`}
               >
                 <CardContent className="p-3 flex items-center">
-                  <img
+                  <Image
                     src={track.album.images[0]?.url || "/placeholder.png"}
                     alt={track.name}
-                    className="w-12 h-12 rounded-md mr-3"
+                    width={48}
+                    height={48}
+                    className="rounded-md mr-3"
                   />
                   <div className="flex-1">
                     <h4 className="font-medium text-white truncate">
@@ -133,10 +136,12 @@ const SearchMusic: React.FC<SearchMusicProps> = ({ onSelect, type }) => {
                 className={`cursor-pointer transition-colors hover:bg-gray-900 ${selectedItem?.id === artist.id ? "border-green-500" : ""}`}
               >
                 <CardContent className="p-3 flex items-center">
-                  <img
+                  <Image
                     src={artist.images[0]?.url || "/placeholder.png"}
                     alt={artist.name}
-                    className="w-12 h-12 rounded-md mr-3"
+                    width={48}
+                    height={48}
+                    className="rounded-md mr-3"
                   />
                   <div className="flex-1">
                     <h4 className="font-medium text-white truncate">
@@ -155,15 +160,9 @@ const SearchMusic: React.FC<SearchMusicProps> = ({ onSelect, type }) => {
       </div>
 
       {selectedItem &&
-        "preview_url" in selectedItem &&
-        selectedItem.preview_url && (
-          <MusicPlayer
-            previewUrl={selectedItem.preview_url}
-            albumArt={selectedItem.album.images[0]?.url || ""}
-            trackName={selectedItem.name}
-            artistName={selectedItem.artists[0].name}
-            className="mt-4"
-          />
+        "external_urls" in selectedItem &&
+        selectedItem.external_urls.spotify && (
+          <Spotify link={selectedItem.external_urls.spotify} />
         )}
 
       <Button
@@ -181,10 +180,6 @@ const SearchMusic: React.FC<SearchMusicProps> = ({ onSelect, type }) => {
                     "album" in selectedItem
                       ? selectedItem.album.images[0]?.url
                       : selectedItem.images[0]?.url || "",
-                  previewUrl:
-                    "preview_url" in selectedItem
-                      ? selectedItem.preview_url
-                      : undefined,
                 }
               : {
                   id: "",

@@ -1,0 +1,7 @@
+[
+  {
+    "key": "ctrl+t",
+    "command": "editor.action.smartSelect.expand",
+    "when": "editorTextFocus"
+  }
+]

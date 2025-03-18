@@ -17,12 +17,12 @@ export type FormState = {
   fields?: Record<string, string>;
   issues?: string[];
   selectedSong?: string;
-  form?: any;
+  form?: { [key: string]: FormDataEntryValue };
   id: string;
 };
 
 export async function onSubmitP1AnswerAction(
-  prevState: FormState,
+  _: FormState,
   data: FormData
 ): Promise<FormState> {
   console.warn("submitting");
@@ -55,9 +55,10 @@ export async function onSubmitP1AnswerAction(
       form: formData,
       id,
     };
-  } catch (error) {
+  } catch (error: unknown) {
     return {
-      message: "Something went wrong on the server: " + error?.message,
+      message:
+        "Something went wrong on the server: " + (error as Error)?.message,
       id,
     };
   }

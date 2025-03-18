@@ -1,6 +1,5 @@
 "use client";
 
-import useSpotify from "@/hooks/use-spotify";
 import { Spotify } from "react-spotify-embed";
 
 const defaultState = {
@@ -10,8 +9,6 @@ const defaultState = {
 };
 
 export default function DJSeakStream({ initialState = defaultState }) {
-  const spotify = useSpotify(initialState.spotifyLink);
-
   const link = initialState.spotifyLink;
 
   if (!link) {

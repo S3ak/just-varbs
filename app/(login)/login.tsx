@@ -6,6 +6,37 @@ import { useSearchParams } from "next/navigation";
 import { signInWithEmail, signUpWithEmail } from "./actions";
 import Button from "@/components/button";
 import Form from "next/form";
+import { z } from "zod";
+
+const signInSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+});
+
+const signUpSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+});
+
+async function handleSignIn(formData: FormData): Promise<void> {
+  const data = Object.fromEntries(formData);
+  const result = signInSchema.safeParse(data);
+  if (!result.success) {
+    console.error(result.error.errors[0].message);
+    return;
+  }
+  await signInWithEmail(formData);
+}
+
+async function handleSignUp(formData: FormData): Promise<void> {
+  const data = Object.fromEntries(formData);
+  const result = signUpSchema.safeParse(data);
+  if (!result.success) {
+    console.error(result.error.errors[0].message);
+    return;
+  }
+  await signUpWithEmail(formData);
+}
 
 export function Login({ mode = "signin" }: { mode?: "signin" | "signup" }) {
   const searchParams = useSearchParams();
@@ -26,7 +57,7 @@ export function Login({ mode = "signin" }: { mode?: "signin" | "signup" }) {
         </p>
 
         {mode === "signin" ? (
-          <Form action={signInWithEmail}>
+          <Form action={handleSignIn}>
             <p>Sign In</p>
             <label htmlFor="email">Email:</label>
             <input id="email" name="email" type="email" required />
@@ -37,7 +68,7 @@ export function Login({ mode = "signin" }: { mode?: "signin" | "signup" }) {
             <Button type="submit">Log in</Button>
           </Form>
         ) : (
-          <Form action={signUpWithEmail}>
+          <Form action={handleSignUp}>
             <p>Sign Up</p>
             <label htmlFor="email">Email:</label>
             <input id="register-email" name="email" type="email" required />

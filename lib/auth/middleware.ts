@@ -7,8 +7,7 @@ export type ActionState = {
   [key: string]: any; //eslint-disable-line
 };
 
-type ValidatedActionFunction<S extends z.ZodType<any, any>, T> = (
-  //eslint-disable-line
+type ValidatedActionFunction<S extends z.ZodType, T> = (
   data: z.infer<S>,
   formData: FormData
 ) => Promise<T>;
