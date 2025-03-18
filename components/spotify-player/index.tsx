@@ -30,7 +30,9 @@ export default function SpotifyPlayerWrapper({ defaultSearchTerm = "" }) {
           type="text"
           name="song"
           placeholder="Enter a song name"
-          onChange={(e) => setValue(e.target.vlue)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setValue(e.target.value)
+          }
         />
       </form>
       {selectedTrack?.external_urls && (
