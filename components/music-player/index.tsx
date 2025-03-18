@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { BsPlayFill, BsPauseFill } from "react-icons/bs";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface MusicPlayerProps {
   previewUrl: string;
@@ -81,10 +82,12 @@ const MusicPlayer: React.FC<MusicPlayerProps> = ({
       )}
     >
       <div className="flex items-center mb-4">
-        <img
+        <Image
           src={albumArt}
           alt={`${trackName} album art`}
-          className="w-16 h-16 rounded-md mr-4"
+          width={64}
+          height={64}
+          className="rounded-md mr-4"
         />
         <div className="flex flex-col">
           <h3 className="font-bold truncate">{trackName}</h3>
