@@ -1,19 +1,14 @@
 "use client";
 
-import { Spotify } from "react-spotify-embed";
+import React from "react";
 import Link from "next/link";
-import { z } from "zod";
-import { useActionState, useState } from "react";
-import { useForm } from "react-hook-form";
-import Button from "@/components/button";
-import useGameStore from "@/hooks/use-game";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import InputField from "@/components/input-field";
-import { p1FormSchema } from "@/lib/game/formSchemas";
-import { useRouter, useSearchParams } from "next/navigation";
-
 import Form from "next/form";
+import { usePathname } from "next/navigation";
+import { Spotify } from "react-spotify-embed";
+import Button from "@/components/button";
+import InputField from "@/components/input-field";
+import useGameStore from "@/hooks/use-game";
+
 import { onSubmitAnswerAction } from "@/app/match/[slug]/actions";
 
 export default function Game({
@@ -35,6 +30,8 @@ export default function Game({
     null,
     initialSearchParms
   );
+
+  const pathName = usePathname();
 
   // const p1form = useForm<z.output<typeof p1FormSchema>>({
   //   resolver: zodResolver(p1FormSchema),
@@ -58,6 +55,23 @@ export default function Game({
   // if (isPending) {
   //   <div>Loading...</div>;
   // }
+
+  const shareData = {
+    title: "You've been invited to battle",
+    text: "Learn web development on MDN!",
+    // FIXME
+    url: window.location.href,
+  };
+
+  async function share() {
+    try {
+      await navigator.share(shareData);
+    } catch (error) {}
+  }
+
+  function handleShare() {
+    share();
+  }
 
   return (
     <div className="max-w-7xl mx-auto text-center">
@@ -99,7 +113,7 @@ export default function Game({
 
             {initialP1Answer && <Spotify link={initialP1Answer} />}
           </section>
-          <Button>Vote</Button>
+          <Button onClick={() => alert("voted")}>Vote</Button>
         </div>
 
         <div className="flex flex-col justify-center">
@@ -142,7 +156,15 @@ export default function Game({
           <Button>Vote</Button>
         </div>
       </section>
-      <div className="flex justify-center gap-4"></div>
+      <div className="flex justify-center gap-4">
+        <Button
+          onClick={() => {
+            handleShare();
+          }}
+        >
+          Share Challenge
+        </Button>
+      </div>
     </div>
   );
 }
