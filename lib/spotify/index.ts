@@ -30,6 +30,7 @@ async function getAccessToken(): Promise<string | null> {
   });
 
   const data = await response.json();
+
   accessToken = data.access_token;
   tokenExpiryTime = Date.now() + data.expires_in * 900; // Set expiry with a small buffer
 
@@ -41,7 +42,7 @@ export async function searchTracks(query: string): Promise<SpotifyTrack[]> {
   const token = await getAccessToken();
 
   const response = await fetch(
-    `https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=track&limit=10`,
+    `${SPOTIFY_API_URL}/search?q=${encodeURIComponent(query)}&type=track&limit=10`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -58,7 +59,7 @@ export async function searchArtists(query: string): Promise<SpotifyArtist[]> {
   const token = await getAccessToken();
 
   const response = await fetch(
-    `https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=artist&limit=10`,
+    `${SPOTIFY_API_URL}/search?q=${encodeURIComponent(query)}&type=artist&limit=10`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -75,7 +76,7 @@ export async function searchAlbums(query: string): Promise<SpotifyAlbum[]> {
   const token = await getAccessToken();
 
   const response = await fetch(
-    `https://api.spotify.com/v1/search?q=${encodeURIComponent(query)}&type=album&limit=10`,
+    `${SPOTIFY_API_URL}/search?q=${encodeURIComponent(query)}&type=album&limit=10`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -91,7 +92,7 @@ export async function searchAlbums(query: string): Promise<SpotifyAlbum[]> {
 export async function getTrack(id: string): Promise<SpotifyTrack> {
   const token = await getAccessToken();
 
-  const response = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {
+  const response = await fetch(`${SPOTIFY_API_URL}/tracks/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -104,7 +105,7 @@ export async function getTrack(id: string): Promise<SpotifyTrack> {
 export async function getArtist(id: string): Promise<SpotifyArtist> {
   const token = await getAccessToken();
 
-  const response = await fetch(`https://api.spotify.com/v1/artists/${id}`, {
+  const response = await fetch(`${SPOTIFY_API_URL}/artists/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -117,11 +118,106 @@ export async function getArtist(id: string): Promise<SpotifyArtist> {
 export async function getAlbum(id: string): Promise<SpotifyAlbum> {
   const token = await getAccessToken();
 
-  const response = await fetch(`https://api.spotify.com/v1/albums/${id}`, {
+  const response = await fetch(`${SPOTIFY_API_URL}/albums/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
   return await response.json();
+}
+
+// Get users current playback state
+export async function userPlayback() {
+  const token = await getAccessToken();
+
+  const response = await fetch(`${SPOTIFY_API_URL}/me/player`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+
+  return data;
+}
+
+// Get users current playback state
+export async function userCurrentSong() {
+  const token = await getAccessToken();
+
+  console.warn("TOKEN ---- >>>>", token);
+
+  const response = await fetch(
+    `${SPOTIFY_API_URL}/me/player/currently-playing`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  const data = await response.json();
+
+  console.warn("Current track ---- >>>>", data);
+
+  return data;
+}
+
+export async function getUserProfile(userId = "seakdigital") {
+  const token = await getAccessToken();
+
+  const response = await fetch(`${SPOTIFY_API_URL}/users/${userId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+
+  console.warn("User Profile ---- >>>>", data);
+
+  return data;
+}
+
+export async function getUserTopItems(type = "tracks") {
+  const token = await getAccessToken();
+
+  const response = await fetch(`${SPOTIFY_API_URL}/me/top/${type}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+
+  console.warn("User Profile ---- >>>>", data);
+
+  return data;
+}
+
+export async function getUsersPlaylist(userId = "seakdigital") {
+  const token = await getAccessToken();
+
+  const response = await fetch(`${SPOTIFY_API_URL}/users/${userId}/playlists`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+
+  console.warn("User Playlists ---- >>>>", data);
+
+  return data;
+}
+
+export async function getSeakCurrentSong() {
+  const playback = await userCurrentSong();
+  return playback?.item.external_urls.spotify;
+}
+
+export async function getSeakCurrentTrackDetails() {
+  const playback = await userCurrentSong();
+  return playback?.item;
 }
