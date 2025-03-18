@@ -11,7 +11,7 @@ export function InputField({
   return (
     <>
       <Label htmlFor={name}>{label}</Label>
-      <Input type={type} placeholder={placeholder} {...props} name={name} />
+      <Input type={type} placeholder={placeholder} name={name} {...props} />
     </>
   );
 }

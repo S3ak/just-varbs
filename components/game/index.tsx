@@ -3,87 +3,61 @@
 import { Spotify } from "react-spotify-embed";
 import Link from "next/link";
 import { z } from "zod";
-import { useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useActionState, useState } from "react";
+import { useForm } from "react-hook-form";
 import Button from "@/components/button";
 import useGameStore from "@/hooks/use-game";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Input } from "@/components/ui/input";
-import { p1FormSchema, p2FormSchema } from "@/lib/game/formSchemas";
+import InputField from "@/components/input-field";
+import { p1FormSchema } from "@/lib/game/formSchemas";
 import { useRouter, useSearchParams } from "next/navigation";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+
+import Form from "next/form";
+import { onSubmitAnswerAction } from "@/app/match/[slug]/actions";
 
 export default function Game({
   id = "string",
+  initialP1Name = "",
+  initialP1Query = "",
+  initialP2Name = "",
+  initialP2Query = "",
   initialP1Answer = "",
   initialP2Answer = "",
-  initialSearchParams,
+  initialSearchParms,
 }) {
-  // const params = useParams<{ tag: string; item: string }>();
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const generateQuestion = useGameStore((state) => state.generateQuestion);
-  const [p1Answer] = useState(initialP1Answer);
-  const [p2Answer] = useState(initialP2Answer);
+
+  // const [state, action, isPending] = useActionState(onSubmitAnswerAction);
 
   const question = generateQuestion();
+  const onSubmitAnswerActionWithSearch = onSubmitAnswerAction.bind(
+    null,
+    initialSearchParms
+  );
 
-  const p1form = useForm<z.output<typeof p1FormSchema>>({
-    resolver: zodResolver(p1FormSchema),
-    defaultValues: {
-      p1Query: searchParams.get("p1Query") ?? "",
-      p1Name: searchParams.get("p1Name") ?? "",
-    },
-  });
+  // const p1form = useForm<z.output<typeof p1FormSchema>>({
+  //   resolver: zodResolver(p1FormSchema),
+  //   defaultValues: {
+  //     p1Query: searchParams.get("p1Query") ?? "",
+  //     p1Name: searchParams.get("p1Name") ?? "",
+  //   },
+  // });
 
-  const p2form = useForm<z.output<typeof p2FormSchema>>({
-    resolver: zodResolver(p2FormSchema),
-    defaultValues: {
-      p2Query: searchParams.get("p2Query") ?? "",
-      p2Name: searchParams.get("p2Name") ?? "",
-    },
-  });
+  // function addParamsToURL(data) {
+  //   const params = {
+  //     p1Name: data.p1Name,
+  //     p1Query: data.p1Query,
+  //   };
 
-  const onSubmit = async (data, e) => {
-    console.log("submitting", data);
-    e.preventDefault();
+  //   const searchParams = new URLSearchParams(Object.entries(params));
+  //   const url = `/match/${id}?${encodeURIComponent(searchParams.toString())}`;
+  //   router.replace(url);
+  // }
 
-    const params = {
-      ...initialSearchParams,
-      p1Name: data.p1Name,
-      p1Query: data.p1Query,
-    };
-
-    const searchParams = new URLSearchParams(Object.entries(params));
-    const url = `/match/${id}?${encodeURIComponent(searchParams.toString())}`;
-    router.replace(url);
-  };
-
-  const onSubmit2 = async (data, e) => {
-    console.log("submitting", data);
-    e.preventDefault();
-
-    const params = {
-      ...initialSearchParams,
-      p1Name: data.p1Name,
-      p1Query: data.p1Query,
-    };
-
-    const searchParams = new URLSearchParams(Object.entries(params));
-    const url = `/match/${id}?${encodeURIComponent(searchParams.toString())}`;
-    router.replace(url);
-  };
-
-  console.log("initialSearchParams", initialSearchParams);
+  // if (isPending) {
+  //   <div>Loading...</div>;
+  // }
 
   return (
     <div className="max-w-7xl mx-auto text-center">
@@ -91,99 +65,79 @@ export default function Game({
         <Link href="/"> back</Link>Start a New Game
       </h1>
       <p className="text-xl mb-8">{question}</p>
-      <section className="flex justify-center gap-4">
+      <section className="flex justify-center gap-4 flex-wrap">
         <div className="flex flex-col" role="column">
           <h2>Player 1</h2>
           <section>
-            <Form {...p1form}>
-              <form
-                onSubmit={p1form.handleSubmit(onSubmit)}
-                className="space-y-8"
-              >
-                <FormField
-                  control={p1form.control}
-                  name="p1Name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Player 1 Name:</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Your Name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={p1form.control}
-                  name="p1Query"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Answer:</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Purple Rain" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        Please select your answer
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button hidden type="submit">
-                  Submit
-                </Button>
-              </form>
+            <Form action={onSubmitAnswerActionWithSearch}>
+              <InputField
+                label="Your Name"
+                name="p1Name"
+                placeholder="Thabo"
+                required
+                defaultValue={
+                  initialP1Name === "undefined" ? "" : initialP1Name
+                }
+              />
+
+              <InputField
+                label="Your Answer"
+                name="p1Query"
+                placeholder="VOID"
+                required
+                defaultValue={
+                  initialP1Query === "undefined" ? "" : initialP1Query
+                }
+              />
+
+              <input hidden name="id" value={id} readOnly />
+
+              <Button hidden type="submit">
+                Submit
+              </Button>
             </Form>
 
-            {p1Answer && <Spotify link={p1Answer} />}
+            {initialP1Answer && <Spotify link={initialP1Answer} />}
           </section>
           <Button>Vote</Button>
+        </div>
+
+        <div className="flex flex-col justify-center">
+          <strong>VS</strong>
         </div>
 
         <div className="flex flex-col" role="column">
           <h2>Player 2</h2>
           <section>
-            <Form {...p2form}>
-              <form
-                onSubmit={p2form.handleSubmit(onSubmit2)}
-                className="space-y-8"
-              >
-                <FormField
-                  control={p2form.control}
-                  name="p2Name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Name:</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Your Name" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={p2form.control}
-                  name="p2Query"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Answer:</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Purple Rain" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        Please select your answer
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button hidden type="submit">
-                  Submit
-                </Button>
-              </form>
+            <Form action={onSubmitAnswerActionWithSearch}>
+              <InputField
+                label="Your Name"
+                name="p2Name"
+                placeholder="Frank"
+                required
+                defaultValue={
+                  initialP2Name === "undefined" ? "" : initialP2Name
+                }
+              />
+
+              <InputField
+                label="Your Answer"
+                name="p2Query"
+                placeholder="I am muic"
+                required
+                defaultValue={
+                  initialP2Query === "undefined" ? "" : initialP2Query
+                }
+              />
+
+              <input hidden name="id" value={id} readOnly />
+
+              <Button hidden type="submit">
+                Submit
+              </Button>
             </Form>
 
-            {p2Answer && <Spotify link={p2Answer} />}
+            {Boolean(initialP2Answer) && <Spotify link={initialP2Answer} />}
           </section>
           <Button>Vote</Button>
         </div>

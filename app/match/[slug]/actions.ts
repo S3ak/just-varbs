@@ -2,11 +2,13 @@
 
 import { searchTracks } from "@/lib/spotify";
 import { p1FormSchema } from "@/lib/game/formSchemas";
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export async function getSong(query: string) {
-  console.log("query is ---->", query);
   const tracks = await searchTracks(query);
-  return tracks[0].external_urls.spotify;
+  console.warn("tracks", tracks);
+  return tracks[0]?.external_urls.spotify;
 }
 
 export type FormState = {
@@ -58,4 +60,43 @@ export async function onSubmitP1AnswerAction(
       id,
     };
   }
+}
+
+export async function onSubmitAnswerAction(
+  initialSearchParams,
+  data: FormData
+) {
+  const { id, p1Name, p1Query, p2Name, p2Query } = Object.fromEntries(data);
+
+  const newP1Name =
+    p1Name === "undefined"
+      ? ""
+      : (p1Name as string) || initialSearchParams.p1Name;
+  const newP1Query =
+    p1Query === "undefined"
+      ? ""
+      : (p1Query as string) || initialSearchParams.p1Query;
+  const newP2Name =
+    p2Name === "undefined"
+      ? ""
+      : (p2Name as string) || initialSearchParams.p2Name;
+  const newP2Query =
+    p2Query === "undefined"
+      ? ""
+      : (p2Query as string) || initialSearchParams.p2Query;
+
+  console.warn("initialSearchParams --->", initialSearchParams);
+
+  const params = {
+    p1Name: newP1Name,
+    p1Query: newP1Query,
+    p2Name: newP2Name,
+    p2Query: newP2Query,
+  };
+
+  const searchParams = new URLSearchParams(Object.entries(params));
+  const url = `/match/${id}?${searchParams.toString()}`;
+
+  revalidatePath(`/match/${id}`);
+  redirect(url);
 }
