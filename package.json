@@ -6,7 +6,11 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test:e2e": "start-server-and-test dev http://localhost:3000 cypress:run",
+    "test:e2e:dev": "start-server-and-test dev http://localhost:3000 cypress:open"
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.2",
@@ -20,6 +24,7 @@
     "@supabase/supabase-js": "^2.49.1",
     "@tabler/icons-react": "^3.31.0",
     "@tanstack/react-form": "^1.0.5",
+    "@types/uuid": "^10.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "eslint-config-prettier": "^10.1.1",
@@ -40,6 +45,7 @@
     "tailwind-merge": "^3.0.2",
     "tailwindcss-animate": "^1.0.7",
     "usehooks-ts": "^3.1.1",
+    "uuid": "^11.1.0",
     "zod": "^3.24.2",
     "zustand": "^5.0.3"
   },
@@ -50,8 +56,10 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cypress": "^14.2.0",
     "eslint": "^9",
     "eslint-config-next": "15.2.2",
+    "start-server-and-test": "^2.0.11",
     "tailwindcss": "^4",
     "typescript": "^5"
   },

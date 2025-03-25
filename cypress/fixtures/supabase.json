@@ -1,0 +1,47 @@
+{
+  "user": {
+    "id": "12345",
+    "email": "user@example.com",
+    "name": "John Doe",
+    "created_at": "2023-01-01T00:00:00Z"
+  },
+  "tracks": [
+    {
+      "id": "track1",
+      "title": "Summer Vibes",
+      "artist": "Artist A",
+      "album": "Album A",
+      "duration": 210,
+      "spotify_url": "https://open.spotify.com/track/track1"
+    },
+    {
+      "id": "track2",
+      "title": "Summer Paradise",
+      "artist": "Artist B",
+      "album": "Album B",
+      "duration": 200,
+      "spotify_url": "https://open.spotify.com/track/track2"
+    }
+  ],
+  "game": {
+    "id": "game1",
+    "status": "active",
+    "players": [
+      {
+        "id": "player1",
+        "name": "John Doe",
+        "instagram": "@johndoe",
+        "query": "Summer Vibes"
+      },
+      {
+        "id": "player2",
+        "name": "Jane Smith",
+        "instagram": "@janesmith",
+        "query": "Summer Paradise"
+      }
+    ],
+    "judge": {
+      "name": "Judge Judy"
+    }
+  }
+}

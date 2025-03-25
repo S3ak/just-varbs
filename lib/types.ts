@@ -80,3 +80,14 @@ export interface SpotifyAlbum {
   images: Array<{ url: string; height: number; width: number }>;
   release_date: string;
 }
+
+export interface Game {
+  id: string;
+  player1_id: string;
+  player2_id?: string;
+  genre: string;
+  game_mode: string;
+  question: string;
+  created_at?: string;
+  updated_at?: string;
+}
