@@ -1,7 +1,6 @@
-// @ts-check
 /// <reference types="cypress" />
 
-import "../global.d.ts";
+// import "../global.d.ts";
 
 // Custom command to login
 Cypress.Commands.add(
