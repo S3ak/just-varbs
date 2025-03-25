@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { normalizeUrlEncoding } from "utils";
+import { normalizeUrlEncoding } from "../utils";
 
 // Custom command to login
 Cypress.Commands.add(
