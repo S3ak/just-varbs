@@ -44,3 +44,39 @@ Cypress.Commands.add("createNewGame", (gameData = defaultGameData) => {
   cy.get('select[name="question"]').select(gameData.question);
   cy.get('button[type="submit"]').click();
 });
+
+// Custom command to submit a player's answer
+Cypress.Commands.add(
+  "submitPlayerAnswer",
+  (
+    playerNumber: 1 | 2,
+    data: { name: string; instagram: string; query: string }
+  ) => {
+    cy.get(`[name="player${playerNumber}Name"]`).type(data.name);
+    cy.get(`[name="player${playerNumber}Instagram"]`).type(data.instagram);
+    cy.get(`[name="player${playerNumber}Query"]`).type(data.query);
+
+    if (playerNumber === 2) {
+      cy.get('[data-testid="player2-submit-answer"]').click();
+    } else {
+      cy.get('button[type="submit"]').first().click();
+    }
+
+    // Wait for form to be disabled and URL to update
+    cy.get(`[name="player${playerNumber}Name"]`).should("be.disabled");
+    cy.get(`[name="player${playerNumber}Instagram"]`).should("be.disabled");
+    cy.get(`[name="player${playerNumber}Query"]`).should("be.disabled");
+    cy.url().should(
+      "include",
+      `player${playerNumber}Name=${encodeURIComponent(data.name)}`
+    );
+    cy.url().should(
+      "include",
+      `player${playerNumber}Instagram=${encodeURIComponent(data.instagram)}`
+    );
+    cy.url().should(
+      "include",
+      `player${playerNumber}Query=${encodeURIComponent(data.query)}`
+    );
+  }
+);

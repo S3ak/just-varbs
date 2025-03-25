@@ -281,6 +281,7 @@ export default async function Page({
                     placeholder="Enter your name"
                     required
                     className="bg-zinc-800 border-zinc-600 text-white placeholder-zinc-400"
+                    data-testid="judge-name-input"
                   />
                   <input type="hidden" name="id" defaultValue={slug} />
                   <input

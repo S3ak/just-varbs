@@ -9,92 +9,53 @@ describe("Match Page", () => {
   });
 
   it("should allow Player 1 to submit their answer", () => {
-    // Fill in Player 1 details
-    cy.get('[name="player1Name"]').type("John Doe");
-    cy.get('[name="player1Instagram"]').type("@johndoe");
-    cy.get('[name="player1Query"]').type("Summer Vibes");
-
-    // Submit Player 1's answer
-    cy.get('button[type="submit"]').first().click();
-
-    // Verify URL contains Player 1's data
-    cy.url().should("include", "player1Name=John+Doe");
-    cy.url().should("include", "player1Instagram=%40johndoe");
-    cy.url().should("include", "player1Query=Summer+Vibes");
-
-    // Verify form is disabled after submission
-    cy.get('[name="player1Name"]').should("be.disabled");
-    cy.get('[name="player1Instagram"]').should("be.disabled");
-    cy.get('[name="player1Query"]').should("be.disabled");
+    cy.submitPlayerAnswer(1, {
+      name: "John Doe",
+      instagram: "@johndoe",
+      query: "Summer Vibes",
+    });
   });
 
   it("should allow Player 2 to submit their answer", () => {
     // First submit Player 1's answer
-    cy.get('[name="player1Name"]').type("John Doe");
-    cy.get('[name="player1Instagram"]').type("@johndoe");
-    cy.get('[name="player1Query"]').type("Summer Vibes");
-    cy.get('button[type="submit"]').first().click();
-
-    // Wait for Player 1's form to be disabled and URL to update
-    cy.get('[name="player1Name"]').should("be.disabled");
-    cy.get('[name="player1Instagram"]').should("be.disabled");
-    cy.get('[name="player1Query"]').should("be.disabled");
-    cy.url().should("include", "player1Name=John+Doe");
+    cy.submitPlayerAnswer(1, {
+      name: "John Doe",
+      instagram: "@johndoe",
+      query: "Summer Vibes",
+    });
 
     // Fill in Player 2 details
-    cy.get('[name="player2Name"]').type("Jane Smith");
-    cy.get('[name="player2Instagram"]').type("@janesmith");
-    cy.get('[name="player2Query"]').type("Summer Paradise");
-
-    // Submit Player 2's answer
-    cy.get('[data-testid="player2-submit-answer"]').click();
-
-    // Wait for URL to update with Player 2's data
-    cy.url().should("include", "player2Name=Jane+Smith");
-    cy.url().should("include", "player2Query=Summer+Paradise");
-
-    // Verify Player 2's form is disabled after submission
-    cy.get('[name="player2Name"]').should("be.disabled");
-    cy.get('[name="player2Instagram"]').should("be.disabled");
-    cy.get('[name="player2Query"]').should("be.disabled");
+    cy.submitPlayerAnswer(2, {
+      name: "Jane Smith",
+      instagram: "@janesmith",
+      query: "Summer Paradise",
+    });
   });
 
   it("should allow judge to submit their name and vote", () => {
     // First submit both players' answers
-    cy.get('input[name="player1Name"]').type("John Doe");
-    cy.get('input[name="player1Instagram"]').type("@johndoe");
-    cy.get('input[name="player1Query"]').type("Summer Vibes");
-    cy.get('button[type="submit"]').first().click();
+    cy.submitPlayerAnswer(1, {
+      name: "John Doe",
+      instagram: "@johndoe",
+      query: "Summer Vibes",
+    });
 
-    // Wait for Player 1's form to be disabled and URL to update
-    cy.get('[name="player1Name"]').should("be.disabled");
-    cy.get('[name="player1Instagram"]').should("be.disabled");
-    cy.get('[name="player1Query"]').should("be.disabled");
-    cy.url().should("include", "player1Name=John+Doe");
-
-    // Fill in Player 2 details
-    cy.get('input[name="player2Name"]').type("Jane Smith");
-    cy.get('input[name="player2Instagram"]').type("@janesmith");
-    cy.get('input[name="player2Query"]').type("Summer Paradise");
-    cy.get('[data-testid="player2-submit-answer"]').click();
-
-    // Wait for Player 2's form to be disabled and URL to update
-    cy.get('[name="player2Name"]').should("be.disabled");
-    cy.get('[name="player2Instagram"]').should("be.disabled");
-    cy.get('[name="player2Query"]').should("be.disabled");
-    cy.url().should("include", "player2Name=Jane+Smith");
-    cy.url().should("include", "player2Query=Summer+Paradise");
+    cy.submitPlayerAnswer(2, {
+      name: "Jane Smith",
+      instagram: "@janesmith",
+      query: "Summer Paradise",
+    });
 
     // Submit judge name
-    cy.get('input[name="judgeName"]').type("Judge Bob");
-    cy.get('data-testid="judge-name-submit"').click();
+    cy.get('[data-testid="judge-name-input"]').type("Judge Bob");
+    cy.get('[data-testid="judge-name-submit"]').click();
 
     // Wait for judge name to be in URL and form to be hidden
     cy.url().should("include", "judgeName=Judge+Bob");
-    cy.get('input[name="judgeName"]').should("not.exist");
+    cy.get('[data-testid="judge-name-input"]').should("not.exist");
 
     // Submit vote
-    cy.get('data-testid="judge-vote-player1"').click();
+    cy.get('button[type="submit"]').first().click();
 
     // Wait for winner to be displayed
     cy.contains("🏆 Winner 🏆").should("be.visible");
@@ -102,10 +63,11 @@ describe("Match Page", () => {
 
   it("should preserve all parameters when submitting answers", () => {
     // Fill in and submit Player 1's answer
-    cy.get('[name="player1Name"]').type("John Doe");
-    cy.get('[name="player1Instagram"]').type("@johndoe");
-    cy.get('[name="player1Query"]').type("Summer Vibes");
-    cy.get('button[type="submit"]').first().click();
+    cy.submitPlayerAnswer(1, {
+      name: "John Doe",
+      instagram: "@johndoe",
+      query: "Summer Vibes",
+    });
 
     // Verify original parameters are preserved
     cy.url().should(
@@ -115,10 +77,11 @@ describe("Match Page", () => {
     cy.url().should("include", "genre=hip-hop");
 
     // Fill in and submit Player 2's answer
-    cy.get('[name="player2Name"]').type("Jane Smith");
-    cy.get('[name="player2Instagram"]').type("@janesmith");
-    cy.get('[name="player2Query"]').type("Summer Paradise");
-    cy.get('[data-testid="player2-submit-answer"]').click();
+    cy.submitPlayerAnswer(2, {
+      name: "Jane Smith",
+      instagram: "@janesmith",
+      query: "Summer Paradise",
+    });
 
     // Verify all parameters are still preserved
     cy.url().should(
@@ -132,19 +95,21 @@ describe("Match Page", () => {
 
   it("should display Spotify embeds after song submissions", () => {
     // Submit Player 1's answer
-    cy.get('[name="player1Name"]').type("John Doe");
-    cy.get('[name="player1Instagram"]').type("@johndoe");
-    cy.get('[name="player1Query"]').type("Summer Vibes");
-    cy.get('button[type="submit"]').first().click();
+    cy.submitPlayerAnswer(1, {
+      name: "John Doe",
+      instagram: "@johndoe",
+      query: "Summer Vibes",
+    });
 
     // Verify Spotify embed is displayed
     cy.get('iframe[src*="spotify.com"]').should("be.visible");
 
     // Submit Player 2's answer
-    cy.get('[name="player2Name"]').type("Jane Smith");
-    cy.get('[name="player2Instagram"]').type("@janesmith");
-    cy.get('[name="player2Query"]').type("Summer Paradise");
-    cy.get('[data-testid="player2-submit-answer"]').click();
+    cy.submitPlayerAnswer(2, {
+      name: "Jane Smith",
+      instagram: "@janesmith",
+      query: "Summer Paradise",
+    });
 
     // Verify both Spotify embeds are displayed
     cy.get('iframe[src*="spotify.com"]').should("have.length", 2);
