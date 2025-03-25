@@ -23,3 +23,19 @@ export function addParamsToURL(
   const searchParams = new URLSearchParams(Object.entries(params));
   return `${pathName}/${slug}?${searchParams.toString()}`;
 }
+
+export function getWinner(search: Record<string, string> | undefined) {
+  let winner = "";
+
+  if (!search) {
+    return winner;
+  }
+
+  if (search.vote === "player1") {
+    winner = search.player1Name;
+  } else if (search.vote === "player2") {
+    winner = search.player2Name;
+  }
+
+  return winner;
+}
