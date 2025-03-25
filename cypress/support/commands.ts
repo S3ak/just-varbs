@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-// import "../global.d.ts";
+import { normalizeUrlEncoding } from "utils";
 
 // Custom command to login
 Cypress.Commands.add(
@@ -67,11 +67,17 @@ Cypress.Commands.add(
     cy.get(`[name="player${playerNumber}Instagram"]`).should("be.disabled");
     cy.get(`[name="player${playerNumber}Query"]`).should("be.disabled");
 
-    cy.url().should("include", `player${playerNumber}Name=${data.name}`);
     cy.url().should(
       "include",
-      `player${playerNumber}Instagram=${data.instagram}`
+      `player${playerNumber}Name=${normalizeUrlEncoding(data.name)}`
     );
-    cy.url().should("include", `player${playerNumber}Query=${data.query}`);
+    cy.url().should(
+      "include",
+      `player${playerNumber}Instagram=${normalizeUrlEncoding(data.instagram)}`
+    );
+    cy.url().should(
+      "include",
+      `player${playerNumber}Query=${normalizeUrlEncoding(data.query)}`
+    );
   }
 );

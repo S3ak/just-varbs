@@ -16,7 +16,7 @@ const mockJudge = {
   name: "Judge Bob",
 };
 
-describe("Match Page", () => {
+describe("Match Page >>>", () => {
   beforeEach(() => {
     // Visit a match page with initial parameters
     cy.visit(
@@ -25,20 +25,8 @@ describe("Match Page", () => {
   });
 
   it("should allow Player 1 to submit their answer", () => {
+    // Fill in Player 1 details
     cy.submitPlayerAnswer(1, mockPlayer1);
-
-    cy.url().should(
-      "include",
-      `player1Name=${encodeURIComponent(mockPlayer1.name)}`
-    );
-    cy.url().should(
-      "include",
-      `player1Instagram=${encodeURIComponent(mockPlayer1.instagram)}`
-    );
-    cy.url().should(
-      "include",
-      `player1Query=${encodeURIComponent(mockPlayer1.query)}`
-    );
   });
 
   it("should allow Player 2 to submit their answer", () => {
@@ -52,31 +40,6 @@ describe("Match Page", () => {
 
     // Fill in Player 2 details
     cy.submitPlayerAnswer(2, mockPlayer2);
-
-    cy.url().should(
-      "include",
-      `player1Name=${encodeURIComponent(mockPlayer1.name)}`
-    );
-    cy.url().should(
-      "include",
-      `player1Instagram=${encodeURIComponent(mockPlayer1.instagram)}`
-    );
-    cy.url().should(
-      "include",
-      `player1Query=${encodeURIComponent(mockPlayer1.query)}`
-    );
-    cy.url().should(
-      "include",
-      `player2Name=${encodeURIComponent(mockPlayer2.name)}`
-    );
-    cy.url().should(
-      "include",
-      `player2Instagram=${encodeURIComponent(mockPlayer2.instagram)}`
-    );
-    cy.url().should(
-      "include",
-      `player2Query=${encodeURIComponent(mockPlayer2.query)}`
-    );
   });
 
   it("should allow judge to submit their name and vote for player 1", () => {
