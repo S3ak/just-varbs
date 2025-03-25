@@ -1,5 +1,4 @@
 import Link from "next/link";
-// import { UserButton } from "@clerk/nextjs";
 import { FaMusic } from "react-icons/fa";
 
 export default function PrimaryNav() {
@@ -17,7 +16,6 @@ export default function PrimaryNav() {
         >
           New Game
         </Link>
-        {/* <UserButton afterSignOutUrl="/" /> */}
       </div>
     </nav>
   );

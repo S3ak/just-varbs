@@ -109,7 +109,7 @@ export default async function Home() {
 
           <div className="text-center mt-16">
             <Link
-              href={`/match/${crypto.randomUUID()}`}
+              href={`/new-game`}
               className={buttonVariants({ variant: "default" })}
             >
               Start a new Game
