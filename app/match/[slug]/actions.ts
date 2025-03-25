@@ -49,7 +49,6 @@ export async function onSubmitPlayerAnswerAction(formData: FormData) {
     ) as string;
     const playerQuery = formData.get(`player${playerNumber}Query`) as string;
     const currentUrlStr = formData.get("currentUrl") as string;
-    console.log("currentUrlStr ----->", currentUrlStr);
 
     if (!id || !playerNumber || !playerName || !playerQuery) {
       console.error("Invalid form data");
@@ -79,8 +78,6 @@ export async function onSubmitPlayerAnswerAction(formData: FormData) {
       currentParams = {};
     }
 
-    console.log("currentParams", currentParams);
-
     // Create new params object with existing params
     const newParams = {
       ...currentParams,
@@ -94,17 +91,17 @@ export async function onSubmitPlayerAnswerAction(formData: FormData) {
 
     // Redirect to the new URL
     redirect(newUrl);
-  } catch (error) {
+  } catch (error: unknown) {
+    // Don't log NEXT_REDIRECT errors as they are expected
+    if (error instanceof Error && error.message.includes("NEXT_REDIRECT")) {
+      throw error;
+    }
     console.error("Error submitting answer:", error);
-    // Re-throw the error to be handled by the form
     throw error;
   }
 }
 
-export async function onJudgeNameSubmit(
-  search: Record<string, string>,
-  formData: FormData
-) {
+export async function onJudgeNameSubmit(formData: FormData) {
   try {
     const id = formData.get("id") as string;
     const judgeName = formData.get("judgeName") as string;
@@ -143,28 +140,48 @@ export async function onJudgeNameSubmit(
 
     // Redirect to the new URL
     redirect(newUrl);
-  } catch (error) {
+  } catch (error: unknown) {
+    // Don't log NEXT_REDIRECT errors as they are expected
+    if (error instanceof Error && error.message.includes("NEXT_REDIRECT")) {
+      throw error;
+    }
     console.error("Error submitting judge name:", error);
+    throw error;
   }
 }
 
-export async function onJudgeVote(
-  search: Record<string, string>,
-  formData: FormData
-) {
+export async function onJudgeVote(formData: FormData) {
   try {
     const id = formData.get("id") as string;
     const vote = formData.get("vote") as string;
     const judgeName = formData.get("judgeName") as string;
+    const currentUrlStr = formData.get("currentUrl") as string;
 
     if (!id || !vote || !judgeName) {
       console.error("Invalid form data");
       return;
     }
 
+    // Get the current URL and parse its search params
+    if (!currentUrlStr) {
+      console.error("No current URL provided");
+      return;
+    }
+
+    let currentParams = {};
+    try {
+      // Extract search params from the relative URL
+      const searchParams = new URLSearchParams(currentUrlStr.split("?")[1]);
+      currentParams = Object.fromEntries(searchParams);
+    } catch (error) {
+      console.error("Error parsing current URL:", error);
+      // If URL parsing fails, use empty params
+      currentParams = {};
+    }
+
     // Create new params object with existing params
     const newParams = {
-      ...search,
+      ...currentParams,
       vote,
       judgeName,
     };
@@ -174,7 +191,12 @@ export async function onJudgeVote(
 
     // Redirect to the new URL
     redirect(newUrl);
-  } catch (error) {
+  } catch (error: unknown) {
+    // Don't log NEXT_REDIRECT errors as they are expected
+    if (error instanceof Error && error.message.includes("NEXT_REDIRECT")) {
+      throw error;
+    }
     console.error("Error submitting vote:", error);
+    throw error;
   }
 }

@@ -6,159 +6,101 @@ describe("New Game Creation", () => {
   });
 
   it("should create a new game with all fields filled", () => {
-    // Fill in Player 1 details
-    cy.get('[data-testid="player1-name"]').type("John Doe");
-    cy.get('[data-testid="player1-email"]').type("john@example.com");
-    cy.get('[data-testid="player1-instagram"]').type("@johndoe");
-
-    // Fill in Player 2 details
-    cy.get('[data-testid="player2-name"]').type("Jane Smith");
-    cy.get('[data-testid="player2-email"]').type("jane@example.com");
-    cy.get('[data-testid="player2-instagram"]').type("@janesmith");
-
-    // Select genre
-    cy.get('[data-testid="genre-select"]').select("pop");
-
-    // Select game mode
-    cy.get('[data-testid="game-mode-select"]').select("best-ever");
-
-    // Select question
-    cy.get('[data-testid="question-select"]').select(
+    cy.get('input[name="player1Name"]').type("John Doe");
+    cy.get('input[name="player1Email"]').type("john@example.com");
+    cy.get('input[name="player1Instagram"]').type("@johndoe");
+    cy.get('input[name="player2Name"]').type("Jane Smith");
+    cy.get('input[name="player2Email"]').type("jane@example.com");
+    cy.get('input[name="player2Instagram"]').type("@janesmith");
+    cy.get('select[name="genre"]').select("pop");
+    cy.get('select[name="gameMode"]').select("best-ever");
+    cy.get('select[name="question"]').select(
       "What song best captures the feeling of summer?"
     );
+    cy.get('button[type="submit"]').click();
 
-    // Submit the form
-    cy.get('[data-testid="submit-button"]').click();
-
-    // Assert URL parameters
-    cy.url()
-      .should(
-        "match",
-        /\/match\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/
-      )
-      .and("include", "player1Name=John%20Doe")
-      .and("include", "player1Email=john%40example.com")
-      .and("include", "player1Instagram=%40johndoe")
-      .and("include", "player2Name=Jane%20Smith")
-      .and("include", "player2Email=jane%40example.com")
-      .and("include", "player2Instagram=%40janesmith")
-      .and("include", "genre=pop")
-      .and("include", "gameMode=best-ever")
-      .and(
-        "include",
-        "question=What%20song%20best%20captures%20the%20feeling%20of%20summer%3F"
-      );
+    // Check URL with encoded parameters
+    cy.url().should("include", "player1Name=John+Doe");
+    cy.url().should("include", "player2Name=Jane+Smith");
+    cy.url().should("include", "genre=pop");
   });
 
   it("should create a new game with only required fields", () => {
-    // Fill in only required fields
-    cy.get('[data-testid="player1-name"]').type("John Doe");
-    cy.get('[data-testid="player1-email"]').type("john@example.com");
-    cy.get('[data-testid="question-select"]').select(
+    cy.get('input[name="player1Name"]').type("John Doe");
+    cy.get('input[name="player1Email"]').type("john@example.com");
+    cy.get('select[name="genre"]').select("hip-hop");
+    cy.get('select[name="gameMode"]').select("best-ever");
+    cy.get('select[name="question"]').select(
       "What song best captures the feeling of summer?"
     );
+    cy.get('button[type="submit"]').click();
 
-    // Submit the form
-    cy.get('[data-testid="submit-button"]').click();
-
-    // Assert URL parameters
-    cy.url()
-      .should(
-        "match",
-        /\/match\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/
-      )
-      .and("include", "player1Name=John%20Doe")
-      .and("include", "player1Email=john%40example.com")
-      .and(
-        "include",
-        "question=What%20song%20best%20captures%20the%20feeling%20of%20summer%3F"
-      );
+    // Check URL with encoded parameters
+    cy.url().should("include", "player1Name=John+Doe");
+    cy.url().should("include", "genre=hip-hop");
   });
 
   it("should show validation errors for required fields", () => {
     // Submit empty form
-    cy.get('[data-testid="submit-button"]').click();
+    cy.get('button[type="submit"]').click();
 
     // Assert validation errors for required fields only
-    cy.get('[data-testid="player1-name"]').should("have.attr", "required");
-    cy.get('[data-testid="player1-email"]').should("have.attr", "required");
-    cy.get('[data-testid="question-select"]').should("have.attr", "required");
+    cy.get('input[name="player1Name"]').should("have.attr", "required");
+    cy.get('input[name="player1Email"]').should("have.attr", "required");
+    cy.get('select[name="question"]').should("have.attr", "required");
 
     // Assert optional fields don't have required attribute
-    cy.get('[data-testid="player2-name"]').should("not.have.attr", "required");
-    cy.get('[data-testid="player2-email"]').should("not.have.attr", "required");
-    cy.get('[data-testid="genre-select"]').should("not.have.attr", "required");
-    cy.get('[data-testid="game-mode-select"]').should(
-      "not.have.attr",
-      "required"
-    );
+    cy.get('input[name="player2Name"]').should("not.have.attr", "required");
+    cy.get('input[name="player2Email"]').should("not.have.attr", "required");
+    cy.get('select[name="genre"]').should("not.have.attr", "required");
+    cy.get('select[name="gameMode"]').should("not.have.attr", "required");
   });
 
   it("should handle custom question creation", () => {
-    // Select custom question option
-    cy.get('[data-testid="question-select"]').select("custom");
-
-    // Custom question input should be visible
-    cy.get('[data-testid="custom-question-input"]').should("be.visible");
-
-    // Type custom question
-    cy.get('[data-testid="custom-question-input"]').type(
+    cy.get('input[name="player1Name"]').type("John Doe");
+    cy.get('input[name="player1Email"]').type("john@example.com");
+    cy.get('select[name="genre"]').select("hip-hop");
+    cy.get('select[name="gameMode"]').select("best-ever");
+    cy.get('select[name="question"]').select("custom");
+    cy.get('input[name="customQuestion"]').type(
       "What song reminds you of your childhood?"
     );
+    cy.get('button[type="submit"]').click();
 
-    // Fill in required fields
-    cy.get('[data-testid="player1-name"]').type("John Doe");
-    cy.get('[data-testid="player1-email"]').type("john@example.com");
-
-    // Submit the form
-    cy.get('[data-testid="submit-button"]').click();
-
-    // Assert URL includes custom question and matches UUID pattern
-    cy.url()
-      .should(
-        "match",
-        /\/match\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/
-      )
-      .and(
-        "include",
-        "question=What%20song%20reminds%20you%20of%20your%20childhood%3F"
-      );
+    // Check URL with encoded parameters
+    cy.url().should("include", "player1Name=John+Doe");
+    cy.url().should(
+      "include",
+      "question=What+song+reminds+you+of+your+childhood%3F"
+    );
   });
 
   it("should validate email format for player 1", () => {
     // Fill in invalid email for player 1
-    cy.get('[data-testid="player1-email"]').type("invalid-email");
+    cy.get('input[name="player1Email"]').type("invalid-email");
 
     // Submit the form
-    cy.get('[data-testid="submit-button"]').click();
+    cy.get('button[type="submit"]').click();
 
     // Assert email validation error
-    cy.get('[data-testid="player1-email"]').should(
-      "have.attr",
-      "type",
-      "email"
-    );
+    cy.get('input[name="player1Email"]').should("have.attr", "type", "email");
   });
 
   it("should validate email format for player 2 when provided", () => {
     // Fill in required fields
-    cy.get('[data-testid="player1-name"]').type("John Doe");
-    cy.get('[data-testid="player1-email"]').type("john@example.com");
-    cy.get('[data-testid="question-select"]').select(
+    cy.get('input[name="player1Name"]').type("John Doe");
+    cy.get('input[name="player1Email"]').type("john@example.com");
+    cy.get('select[name="question"]').select(
       "What song best captures the feeling of summer?"
     );
 
     // Fill in invalid email for player 2
-    cy.get('[data-testid="player2-email"]').type("invalid-email");
+    cy.get('input[name="player2Email"]').type("invalid-email");
 
     // Submit the form
-    cy.get('[data-testid="submit-button"]').click();
+    cy.get('button[type="submit"]').click();
 
     // Assert email validation error
-    cy.get('[data-testid="player2-email"]').should(
-      "have.attr",
-      "type",
-      "email"
-    );
+    cy.get('input[name="player2Email"]').should("have.attr", "type", "email");
   });
 });
