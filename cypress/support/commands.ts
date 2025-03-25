@@ -66,17 +66,12 @@ Cypress.Commands.add(
     cy.get(`[name="player${playerNumber}Name"]`).should("be.disabled");
     cy.get(`[name="player${playerNumber}Instagram"]`).should("be.disabled");
     cy.get(`[name="player${playerNumber}Query"]`).should("be.disabled");
+
+    cy.url().should("include", `player${playerNumber}Name=${data.name}`);
     cy.url().should(
       "include",
-      `player${playerNumber}Name=${encodeURIComponent(data.name)}`
+      `player${playerNumber}Instagram=${data.instagram}`
     );
-    cy.url().should(
-      "include",
-      `player${playerNumber}Instagram=${encodeURIComponent(data.instagram)}`
-    );
-    cy.url().should(
-      "include",
-      `player${playerNumber}Query=${encodeURIComponent(data.query)}`
-    );
+    cy.url().should("include", `player${playerNumber}Query=${data.query}`);
   }
 );

@@ -13,7 +13,6 @@ import { addParamsToURL, getWinner } from "@/lib/game/utils";
 import ShareGame from "@/components/game/share-game";
 import { Spotify } from "react-spotify-embed";
 import MainMenu from "@/components/main-menu";
-import PollingComponent from "./polling-component";
 
 export default async function Page({
   params,
@@ -57,7 +56,6 @@ export default async function Page({
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-zinc-950 to-zinc-900 text-white">
-      <PollingComponent currentUrl={gameLinkURL} />
       <aside className="hidden md:block fixed left-0 top-0 h-full w-72 bg-zinc-950/50 backdrop-blur-sm border-r border-zinc-800">
         <MainMenu />
       </aside>

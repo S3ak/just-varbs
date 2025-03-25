@@ -32,6 +32,7 @@ const formSchema = z.object({
   genre: z.enum(genres).optional().or(z.literal("")),
   gameMode: z.enum(gameModes).optional().or(z.literal("")),
   question: z.string().min(1, "Question is required"),
+  customQuestion: z.string().optional(),
 });
 
 export async function createNewGameAction(formData: FormData) {
@@ -51,7 +52,18 @@ export async function createNewGameAction(formData: FormData) {
 
     const params = new URLSearchParams();
     Object.entries(result.data).forEach(([key, value]) => {
-      if (value) params.append(key, value);
+      if (value && key !== "customQuestion") {
+        // If the question is "custom" and we have a custom question, use that
+        if (
+          key === "question" &&
+          value === "custom" &&
+          result.data.customQuestion
+        ) {
+          params.append(key, result.data.customQuestion);
+        } else {
+          params.append(key, value);
+        }
+      }
     });
 
     const gameId = uuidv4();
