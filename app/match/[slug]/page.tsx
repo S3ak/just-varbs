@@ -156,7 +156,9 @@ export default async function Page({
                   defaultValue={gameLinkURL}
                 />
                 <input type="hidden" name="judgeName" defaultValue="Judge" />
-                <Button type="submit">Vote</Button>
+                <Button type="submit" data-testid="judge-vote-player1">
+                  Vote
+                </Button>
               </Form>
             )}
           </div>
@@ -241,7 +243,9 @@ export default async function Page({
                   defaultValue={gameLinkURL}
                 />
                 <input type="hidden" name="judgeName" defaultValue="Judge" />
-                <Button type="submit">Vote</Button>
+                <Button type="submit" data-testid="judge-vote-player2">
+                  Vote
+                </Button>
               </Form>
             )}
           </div>
@@ -287,6 +291,7 @@ export default async function Page({
                   <Button
                     type="submit"
                     className="w-full bg-yellow-600 hover:bg-yellow-700 mt-7"
+                    data-testid="judge-name-submit"
                   >
                     Submit Name
                   </Button>

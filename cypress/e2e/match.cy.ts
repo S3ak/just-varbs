@@ -66,26 +66,37 @@ describe("Match Page", () => {
     cy.get('input[name="player1Query"]').type("Summer Vibes");
     cy.get('button[type="submit"]').first().click();
 
+    // Wait for Player 1's form to be disabled and URL to update
+    cy.get('[name="player1Name"]').should("be.disabled");
+    cy.get('[name="player1Instagram"]').should("be.disabled");
+    cy.get('[name="player1Query"]').should("be.disabled");
+    cy.url().should("include", "player1Name=John+Doe");
+
+    // Fill in Player 2 details
     cy.get('input[name="player2Name"]').type("Jane Smith");
     cy.get('input[name="player2Instagram"]').type("@janesmith");
     cy.get('input[name="player2Query"]').type("Summer Paradise");
-    cy.get('button[type="submit"]').eq(1).click();
+    cy.get('[data-testid="player2-submit-answer"]').click();
 
-    // Wait for both players' answers to be submitted
-    cy.url().should("include", "player1Query=Summer+Vibes");
+    // Wait for Player 2's form to be disabled and URL to update
+    cy.get('[name="player2Name"]').should("be.disabled");
+    cy.get('[name="player2Instagram"]').should("be.disabled");
+    cy.get('[name="player2Query"]').should("be.disabled");
+    cy.url().should("include", "player2Name=Jane+Smith");
     cy.url().should("include", "player2Query=Summer+Paradise");
 
     // Submit judge name
     cy.get('input[name="judgeName"]').type("Judge Bob");
-    cy.get('button[type="submit"]').last().click();
+    cy.get('data-testid="judge-name-submit"').click();
 
-    // Verify judge name is in URL
+    // Wait for judge name to be in URL and form to be hidden
     cy.url().should("include", "judgeName=Judge+Bob");
+    cy.get('input[name="judgeName"]').should("not.exist");
 
     // Submit vote
-    cy.get('button[type="submit"]').first().click();
+    cy.get('data-testid="judge-vote-player1"').click();
 
-    // Verify winner is displayed
+    // Wait for winner to be displayed
     cy.contains("🏆 Winner 🏆").should("be.visible");
   });
 
