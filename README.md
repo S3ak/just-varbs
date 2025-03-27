@@ -71,12 +71,6 @@ A demonstration of using the URL as state management with mixtures as the minute
 - Create new branch: `git checkout -b feature/your-name-feature`
 - Obtain .env.local file from Mo.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/match/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
 You will need to have a .env.local file in the root of the project. This will contain the following variables:
 
 - NEXT_PUBLIC_SUPABASE_URL
@@ -85,6 +79,12 @@ You will need to have a .env.local file in the root of the project. This will co
 - SPOTIFY_CLIENT_SECRET
 - SPOTIFY_REFRESH_TOKEN
 - SPOTIFY_TOKEN
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `app/match/page.tsx`. The page auto-updates as you edit the file.
+
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Tech Stack
 
@@ -132,12 +132,14 @@ You will need to have a .env.local file in the root of the project. This will co
 ## Environments
 
 There are two environments;
+
 ### production
 
 Production is the environment the end-user experience. This is the final product that will be deployed to the public. This environment is hosted on Vercel.
+
 ### staging
 
-Staging is the enviroment where the team can test the latest features and bug fixes. This enviroment is hosted on Vercel.
+Staging is the environment where the team can test the latest features and bug fixes. This environment is hosted on Vercel.
 
 ## Learn More
 
@@ -156,4 +158,10 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Gotchas
 
+You cannot use state in server components. Apparently state does not exist on the server? You will need to use client components.
+
 To use [recharts](https://ui.shadcn.com/docs/react-19) with React 19, you will need to override the react-is dependency.
+
+## Why
+
+I wanted to see if you could actually put state in the URL and I needed to learn the new paradigm of NextJS/ React with this whole server component business. I also wanted to try out AI assisted coding vs "Vibe Coding".
