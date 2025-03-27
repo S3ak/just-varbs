@@ -129,10 +129,9 @@ You will need to have a .env.local file in the root of the project. This will co
 - Easy backend integration with Superbase #TODO
 - Schema Validation.
 
-## Enviroments
+## Environments
 
-There are two enviroments;
-
+There are two environments;
 ### production
 
 Production is the enviromewnt the end-user experience. This is the final product that will be deployed to the public. This enviroment is hosted on Vercel.
