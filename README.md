@@ -125,7 +125,7 @@ You will need to have a .env.local file in the root of the project. This will co
 - E2E testing with every pull request #TODO
 - Simple State management with Zustand #TODO
 - Easy Icons with React Icons #TODO
-- Client form managmenet with React Hook Form #TODO
+- Client form management with React Hook Form #TODO
 - Easy backend integration with Superbase #TODO
 - Schema Validation.
 
