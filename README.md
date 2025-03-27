@@ -94,7 +94,7 @@ You will need to have a .env.local file in the root of the project. This will co
 - [Framer Motion](https://www.framer.com/motion/) - Animation library
 - [Storybook](https://storybook.js.org/) - Design System Components
 - [Cypress](https://www.cypress.io/) - e2e testing framework.
-- [Luxon](https://moment.github.io/luxon/#/) - Time Utiliy library.
+- [Luxon](https://moment.github.io/luxon/#/) - Time Utility library.
 - [React Hook Form](https://react-hook-form.com/) - Dope UX for forms.
 - [Zod](https://zod.dev/) - Create schemas for validation with React Hook Form
 - [React Icons](https://react-icons.github.io/react-icons/) - Icons
