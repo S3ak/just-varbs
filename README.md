@@ -134,8 +134,7 @@ You will need to have a .env.local file in the root of the project. This will co
 There are two environments;
 ### production
 
-Production is the enviromewnt the end-user experience. This is the final product that will be deployed to the public. This enviroment is hosted on Vercel.
-
+Production is the environment the end-user experience. This is the final product that will be deployed to the public. This environment is hosted on Vercel.
 ### staging
 
 Staging is the enviroment where the team can test the latest features and bug fixes. This enviroment is hosted on Vercel.
