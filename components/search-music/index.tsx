@@ -10,6 +10,12 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Spotify } from "react-spotify-embed";
 import Image from "next/image";
 
+/**
+ * Props interface for the SearchMusic component
+ * @interface SearchMusicProps
+ * @property {function} onSelect - Callback function triggered when a track or artist is selected
+ * @property {"track" | "artist"} type - Determines whether to search for tracks or artists
+ */
 interface SearchMusicProps {
   onSelect: (item: {
     id: string;
@@ -21,6 +27,27 @@ interface SearchMusicProps {
   type: "track" | "artist";
 }
 
+/**
+ * A client-side component that provides Spotify search functionality
+ * @component
+ * 
+ * @description
+ * This component provides a search interface for Spotify tracks and artists.
+ * Features include:
+ * - Debounced search with 500ms delay
+ * - Real-time search results after 3 characters
+ * - Loading state management
+ * - Animated results list
+ * - Support for both track and artist search modes
+ * 
+ * @example
+ * ```tsx
+ * <SearchMusic 
+ *   type="track"
+ *   onSelect={(item) => console.log('Selected:', item)}
+ * />
+ * ```
+ */
 const SearchMusic: React.FC<SearchMusicProps> = ({ onSelect, type }) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<(SpotifyTrack | SpotifyArtist)[]>([]);
