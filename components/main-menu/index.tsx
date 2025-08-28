@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { navigationLinks } from "@/lib/constants/navigation";
 
+// #TODO: Make it responsive. Should use burger menu on mobile. screen<1080px.
 export default function MainMenu() {
   const pathname = usePathname();
 
